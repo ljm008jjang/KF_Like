@@ -91,7 +91,7 @@ void UTP_WeaponComponent::AttachWeapon(AKillingFloorLikeCharacter* TargetCharact
 
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
-	Character->PickUpWeapon(this);
+	//Character->PickUpWeapon(this);
 }
 
 void UTP_WeaponComponent::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter)

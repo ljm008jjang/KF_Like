@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+#include "BaseWeapon.h"
 #include "InputActionValue.h"
-#include "TP_WeaponComponent.h"
 #include "KillingFloorLikeCharacter.generated.h"
 
 class UInputComponent;
@@ -64,7 +64,7 @@ public:
 	bool GetHasRifle();
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void PickUpWeapon(UTP_WeaponComponent* bNewHasRifle);
+	void PickUpWeapon(ABaseWeapon* bNewHasRifle);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputMappingContext* FireMappingContext;
@@ -98,16 +98,21 @@ protected:
 
 public:
 	/** Returns Mesh1P subobject **/
+	UFUNCTION(BlueprintCallable)
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 	EWeaponType GetCurrnetWeaponType();
-	UTP_WeaponComponent* GetWeapon(EWeaponType WeaponType);
+	ABaseWeapon* GetWeapon(EWeaponType WeaponType);
 
 private:
-	UPROPERTY()
-	TMap<EWeaponType, class UTP_WeaponComponent*> WeaponArray;
+	UPROPERTY(VisibleAnywhere)
+	TMap<EWeaponType, class ABaseWeapon*> WeaponArray;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ABaseWeapon> BaseWeaponClass;
+	UPROPERTY(VisibleAnywhere)
 	EWeaponType CurrentWeaponType = EWeaponType::None;
 
 	void EnableActor(bool isEnable, AActor* Actor);

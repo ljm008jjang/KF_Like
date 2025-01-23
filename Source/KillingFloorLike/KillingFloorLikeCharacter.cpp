@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "TP_PickUpComponent.h"
 #include "TP_WeaponComponent.h"
+#include "Misc/OutputDeviceNull.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -45,6 +46,26 @@ void AKillingFloorLikeCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	if (BaseWeaponClass)
+	{
+		// 스폰 위치와 회전 설정
+		FVector SpawnLocation = GetActorLocation(); // 또는 원하는 위치
+		FRotator SpawnRotation = GetActorRotation(); // 또는 원하는 회전
+
+		// 스폰 파라미터 설정
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		// 무기 스폰
+		ABaseWeapon* SpawnedWeapon = GetWorld()->SpawnActor<ABaseWeapon>(
+			BaseWeaponClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+		if (SpawnedWeapon)
+		{
+			SpawnedWeapon->AttachWeapon(this);
+		}
+	}
 
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -96,7 +117,7 @@ EWeaponType AKillingFloorLikeCharacter::GetCurrnetWeaponType()
 	return CurrentWeaponType;
 }
 
-UTP_WeaponComponent* AKillingFloorLikeCharacter::GetWeapon(EWeaponType WeaponType)
+ABaseWeapon* AKillingFloorLikeCharacter::GetWeapon(EWeaponType WeaponType)
 {
 	if (WeaponArray.Contains(WeaponType) == false)
 	{
@@ -137,6 +158,14 @@ void AKillingFloorLikeCharacter::Fire()
 	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType])
 	{
 		WeaponArray[CurrentWeaponType]->Fire();
+
+		FString FunctionName = TEXT("EventFire");
+		FOutputDeviceNull ar;
+		//UE_LOG(LogTemp, Display, TEXT("%s"), *Mesh1P->GetAnimInstance()->GetName());
+		if (Mesh1P->GetAnimInstance()->CallFunctionByNameWithArguments(*FunctionName, ar, nullptr, true) == false)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Custom Event '%s' 실행 실패!"), *FunctionName);
+		}
 	}
 }
 
@@ -153,9 +182,9 @@ void AKillingFloorLikeCharacter::DropWeapon()
 		PickUpComponent->OnDrop.Broadcast(this);
 	}
 	WeaponArray.Remove(CurrentWeaponType);
-	for (const TPair<EWeaponType, UTP_WeaponComponent*>& Pair : WeaponArray)
+	for (const TPair<EWeaponType, ABaseWeapon*>& Pair : WeaponArray)
 	{
-		UTP_WeaponComponent* Value = Pair.Value;
+		ABaseWeapon* Value = Pair.Value;
 		SwapWeapon(Value->GetWeaponType());
 		break;
 	}
@@ -173,6 +202,11 @@ void AKillingFloorLikeCharacter::OnTriggerSwapWeapon(const FInputActionValue& Ac
 	{
 		SwapWeapon(EWeaponType::Sub);
 	}
+	else if (ActionValue.Get<FVector2D>().X == 3 && WeaponArray.Contains(EWeaponType::Knife) && CurrentWeaponType !=
+		EWeaponType::Knife)
+	{
+		SwapWeapon(EWeaponType::Knife);
+	}
 }
 
 void AKillingFloorLikeCharacter::SwapWeapon(EWeaponType WeaponType)
@@ -183,6 +217,10 @@ void AKillingFloorLikeCharacter::SwapWeapon(EWeaponType WeaponType)
 	}
 	CurrentWeaponType = WeaponType;
 	EnableActor(true, WeaponArray[CurrentWeaponType]->GetOwner());
+
+
+	Mesh1P->SetSkeletalMesh(WeaponArray[CurrentWeaponType]->GetSkeletalMesh(), true);
+	Mesh1P->SetAnimInstanceClass(WeaponArray[CurrentWeaponType]->GetAnimInstance());
 }
 
 void AKillingFloorLikeCharacter::SetHasRifle(bool bNewHasRifle)
@@ -195,7 +233,7 @@ bool AKillingFloorLikeCharacter::GetHasRifle()
 	return bHasRifle;
 }
 
-void AKillingFloorLikeCharacter::PickUpWeapon(UTP_WeaponComponent* NewWeapon)
+void AKillingFloorLikeCharacter::PickUpWeapon(ABaseWeapon* NewWeapon)
 {
 	if (NewWeapon == nullptr)
 	{

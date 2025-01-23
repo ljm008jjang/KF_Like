@@ -24,7 +24,7 @@ void UTP_PickUpComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 	// Checking if it is a First Person Character overlapping
 	AKillingFloorLikeCharacter* Character = Cast<AKillingFloorLikeCharacter>(OtherActor);
 	if (Character != nullptr && (Character->GetWeapon(
-		GetOwner()->GetComponentByClass<UTP_WeaponComponent>()->GetWeaponType()) == nullptr))
+		Cast<ABaseWeapon>(GetOwner())->GetWeaponType()) == nullptr))
 	{
 		// Notify that the actor is being picked up
 		OnPickUp.Broadcast(Character);

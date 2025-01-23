@@ -3,17 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "TP_WeaponComponent.generated.h"
 
 
-UENUM(BlueprintType)
+/*UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
 	None,
 	Main,
 	Sub
-};
+};*/
 
 class AKillingFloorLikeCharacter;
 
