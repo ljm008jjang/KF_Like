@@ -14,6 +14,15 @@ enum class EUnitState : uint8
 	Dead
 };
 
+UENUM(BlueprintType)
+enum class EUnitType : uint8
+{
+	None,
+	Ally,
+	Enemy,
+	Neutral
+};
+
 UCLASS()
 class KILLINGFLOORLIKE_API ABaseCharacter : public ACharacter
 {
@@ -39,7 +48,6 @@ private:
 	float BaseAttackDamage = 10;
 	UPROPERTY(VisibleAnywhere)
 	EUnitState CurrentUnitState = EUnitState::None;
-	
 
 	UFUNCTION(BlueprintCallable)
 	void Attack();
@@ -52,6 +60,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float MaxMoveSpeed = 300;
 	float MoveSpeed;
+	
+	UPROPERTY(VisibleAnywhere)
+	EUnitType CurrentUnitType = EUnitType::None;
 
 	virtual void Dead(AActor* DamageCauser);
 
@@ -63,4 +74,6 @@ public:
 	float GetMoveSpeed();
 
 	EUnitState GetCurrentUnitState();
+	EUnitType GetCurrentUnitType();
+	bool IsAttackableUnitType(ABaseCharacter* AttackedUnit);
 };

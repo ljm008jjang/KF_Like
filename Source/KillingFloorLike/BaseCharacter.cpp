@@ -67,7 +67,7 @@ void ABaseCharacter::Attack()
 			if (FoundActor && FoundActor != this)
 			{
 				ABaseCharacter* FoundBaseCharacter = Cast<ABaseCharacter>(FoundActor);
-				if (FoundBaseCharacter)
+				if (FoundBaseCharacter && IsAttackableUnitType(FoundBaseCharacter))
 				{
 					FDamageEvent DamageEvent;
 					FoundBaseCharacter->TakeDamage(BaseAttackDamage, DamageEvent, GetInstigatorController(), this);
@@ -123,4 +123,19 @@ float ABaseCharacter::GetMoveSpeed()
 EUnitState ABaseCharacter::GetCurrentUnitState()
 {
 	return CurrentUnitState;
+}
+
+EUnitType ABaseCharacter::GetCurrentUnitType()
+{
+	return CurrentUnitType;
+}
+
+bool ABaseCharacter::IsAttackableUnitType(ABaseCharacter* AttackedUnit)
+{
+	if (CurrentUnitType == AttackedUnit->GetCurrentUnitType())
+	{
+		return false;
+	}
+
+	return true;
 }
