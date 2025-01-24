@@ -98,6 +98,11 @@ EWeaponType ABaseWeapon::GetWeaponType()
 	return WeaponType;
 }
 
+UAnimMontage* ABaseWeapon::GetAnimation(EAnimationType AnimationType)
+{
+	return AnimationMap[AnimationType];
+}
+
 void ABaseWeapon::AttachWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;

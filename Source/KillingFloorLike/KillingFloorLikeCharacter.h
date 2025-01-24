@@ -88,7 +88,9 @@ protected:
 	void Fire();
 
 	void DropWeapon();
-	void OnTriggerSwapWeapon(const FInputActionValue& ActionValue);
+	UFUNCTION(BlueprintCallable)
+	void OnTriggerSwapWeapon(int ActionValue);
+
 	void SwapWeapon(EWeaponType ActionValue);
 
 protected:
@@ -104,7 +106,9 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	UFUNCTION(BlueprintCallable)
 	EWeaponType GetCurrnetWeaponType();
+	UFUNCTION(BlueprintCallable)
 	ABaseWeapon* GetWeapon(EWeaponType WeaponType);
 
 private:
@@ -114,6 +118,14 @@ private:
 	TSubclassOf<class ABaseWeapon> BaseWeaponClass;
 	UPROPERTY(VisibleAnywhere)
 	EWeaponType CurrentWeaponType = EWeaponType::None;
+	UPROPERTY(VisibleAnywhere)
+	EWeaponType NextWeaponType = EWeaponType::None;
 
 	void EnableActor(bool isEnable, AActor* Actor);
+
+	UFUNCTION(BlueprintCallable)
+	void ExecWeaponEvent(FString EventName);
+
+	UFUNCTION(BlueprintCallable)
+	void SwapWeaponCallback();
 };

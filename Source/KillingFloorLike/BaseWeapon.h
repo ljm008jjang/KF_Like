@@ -15,6 +15,15 @@ enum class EWeaponType : uint8
 	Knife
 };
 
+UENUM(BlueprintType)
+enum class EAnimationType : uint8
+{
+	None,
+	Fire,
+	Select,
+	PutDown
+};
+
 UCLASS()
 class KILLINGFLOORLIKE_API ABaseWeapon : public AActor
 {
@@ -50,6 +59,9 @@ public:
 
 	EWeaponType GetWeaponType();
 
+	UFUNCTION(BlueprintCallable)
+	UAnimMontage* GetAnimation(EAnimationType AnimationType);
+
 private:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
@@ -72,4 +84,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	float GunDamage = 10;
+
+	UPROPERTY(EditAnywhere)
+	TMap<EAnimationType, class UAnimMontage*> AnimationMap;
 };

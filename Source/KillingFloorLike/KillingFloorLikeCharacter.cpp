@@ -106,9 +106,9 @@ void AKillingFloorLikeCharacter::SetupPlayerInputComponent(class UInputComponent
 		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Started, this,
 		                                   &AKillingFloorLikeCharacter::DropWeapon);
 
-		// SwapWeapon
-		EnhancedInputComponent->BindAction(SwapWeaponAction, ETriggerEvent::Triggered, this,
-		                                   &AKillingFloorLikeCharacter::OnTriggerSwapWeapon);
+		/*// SwapWeapon
+		EnhancedInputComponent->BindAction(SwapWeaponAction, ETriggerEvent::Started, this,
+		                                   &AKillingFloorLikeCharacter::OnTriggerSwapWeapon);*/
 	}
 }
 
@@ -159,13 +159,7 @@ void AKillingFloorLikeCharacter::Fire()
 	{
 		WeaponArray[CurrentWeaponType]->Fire();
 
-		FString FunctionName = TEXT("EventFire");
-		FOutputDeviceNull ar;
-		//UE_LOG(LogTemp, Display, TEXT("%s"), *Mesh1P->GetAnimInstance()->GetName());
-		if (Mesh1P->GetAnimInstance()->CallFunctionByNameWithArguments(*FunctionName, ar, nullptr, true) == false)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Custom Event '%s' 실행 실패!"), *FunctionName);
-		}
+		ExecWeaponEvent(TEXT("EventFire"));
 	}
 }
 
@@ -190,19 +184,19 @@ void AKillingFloorLikeCharacter::DropWeapon()
 	}
 }
 
-void AKillingFloorLikeCharacter::OnTriggerSwapWeapon(const FInputActionValue& ActionValue)
+void AKillingFloorLikeCharacter::OnTriggerSwapWeapon(int ActionValue)
 {
-	if (ActionValue.Get<FVector2D>().X == 1 && WeaponArray.Contains(EWeaponType::Main) && CurrentWeaponType !=
+	if (ActionValue == 1 && WeaponArray.Contains(EWeaponType::Main) && CurrentWeaponType !=
 		EWeaponType::Main)
 	{
 		SwapWeapon(EWeaponType::Main);
 	}
-	else if (ActionValue.Get<FVector2D>().X == 2 && WeaponArray.Contains(EWeaponType::Sub) && CurrentWeaponType !=
+	else if (ActionValue == 2 && WeaponArray.Contains(EWeaponType::Sub) && CurrentWeaponType !=
 		EWeaponType::Sub)
 	{
 		SwapWeapon(EWeaponType::Sub);
 	}
-	else if (ActionValue.Get<FVector2D>().X == 3 && WeaponArray.Contains(EWeaponType::Knife) && CurrentWeaponType !=
+	else if (ActionValue == 3 && WeaponArray.Contains(EWeaponType::Knife) && CurrentWeaponType !=
 		EWeaponType::Knife)
 	{
 		SwapWeapon(EWeaponType::Knife);
@@ -211,16 +205,8 @@ void AKillingFloorLikeCharacter::OnTriggerSwapWeapon(const FInputActionValue& Ac
 
 void AKillingFloorLikeCharacter::SwapWeapon(EWeaponType WeaponType)
 {
-	if (WeaponArray.Contains(CurrentWeaponType))
-	{
-		EnableActor(false, WeaponArray[CurrentWeaponType]->GetOwner());
-	}
-	CurrentWeaponType = WeaponType;
-	EnableActor(true, WeaponArray[CurrentWeaponType]->GetOwner());
-
-
-	Mesh1P->SetSkeletalMesh(WeaponArray[CurrentWeaponType]->GetSkeletalMesh(), true);
-	Mesh1P->SetAnimInstanceClass(WeaponArray[CurrentWeaponType]->GetAnimInstance());
+	NextWeaponType = WeaponType;
+	ExecWeaponEvent(TEXT("EventPutDown"));
 }
 
 void AKillingFloorLikeCharacter::SetHasRifle(bool bNewHasRifle)
@@ -245,21 +231,22 @@ void AKillingFloorLikeCharacter::PickUpWeapon(ABaseWeapon* NewWeapon)
 	bool isUnderWeaponType = static_cast<int32>(CurrentWeaponType) >= static_cast
 		<int32>(NewWeapon->GetWeaponType());
 
-	//첫 종류의 무기이거나 낮은 단계의 무기이면
-	if (WeaponArray.Contains(CurrentWeaponType) == false || isUnderWeaponType)
+	//첫 획득 무기
+	if (WeaponArray.Contains(CurrentWeaponType) == false)
+	{
+		NextWeaponType = NewWeapon->GetWeaponType();
+		SwapWeaponCallback();
+	}
+	//낮은 단계의 무기이면
+	else if (isUnderWeaponType)
 	{
 		SwapWeapon(NewWeapon->GetWeaponType());
-	}
-	//아니면 작동하지 않게 처리
-	else
-	{
-		EnableActor(false, NewWeapon->GetOwner());
 	}
 }
 
 void AKillingFloorLikeCharacter::EnableActor(bool isEnable, AActor* Actor)
 {
-	if (!Actor)
+	/*if (!Actor)
 	{
 		return;
 	}
@@ -268,5 +255,31 @@ void AKillingFloorLikeCharacter::EnableActor(bool isEnable, AActor* Actor)
 
 	Actor->SetActorEnableCollision(isEnable);
 
-	Actor->SetActorTickEnabled(isEnable);
+	Actor->SetActorTickEnabled(isEnable);*/
+}
+
+void AKillingFloorLikeCharacter::ExecWeaponEvent(FString EventName)
+{
+	if (!Mesh1P || !Mesh1P->GetAnimInstance())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Mesh1P 또는 AnimInstance가 유효하지 않습니다!"));
+		return;
+	}
+
+	FOutputDeviceNull ar; // 로그 출력을 무시
+	UE_LOG(LogTemp, Display, TEXT("Trying to execute event: %s"), *EventName);
+
+	if (Mesh1P->GetAnimInstance()->CallFunctionByNameWithArguments(*EventName, ar, nullptr, true) == false)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Custom Event '%s' 실행 실패!"), *EventName);
+	}
+}
+
+void AKillingFloorLikeCharacter::SwapWeaponCallback()
+{
+	CurrentWeaponType = NextWeaponType;
+
+	// 새로운 Skeletal Mesh와 AnimInstance 설정
+	Mesh1P->SetSkeletalMesh(WeaponArray[CurrentWeaponType]->GetSkeletalMesh(), true);
+	Mesh1P->SetAnimInstanceClass(WeaponArray[CurrentWeaponType]->GetAnimInstance());
 }
