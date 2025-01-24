@@ -126,6 +126,11 @@ ABaseWeapon* AKillingFloorLikeCharacter::GetWeapon(EWeaponType WeaponType)
 	return WeaponArray[WeaponType];
 }
 
+ABaseWeapon* AKillingFloorLikeCharacter::GetCurrentWeapon()
+{
+	return WeaponArray[CurrentWeaponType];
+}
+
 
 void AKillingFloorLikeCharacter::Move(const FInputActionValue& Value)
 {

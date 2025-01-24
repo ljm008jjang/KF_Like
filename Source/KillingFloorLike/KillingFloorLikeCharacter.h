@@ -110,6 +110,8 @@ public:
 	EWeaponType GetCurrnetWeaponType();
 	UFUNCTION(BlueprintCallable)
 	ABaseWeapon* GetWeapon(EWeaponType WeaponType);
+	UFUNCTION(BlueprintCallable)
+	ABaseWeapon* GetCurrentWeapon();
 
 private:
 	UPROPERTY(VisibleAnywhere)
