@@ -19,12 +19,17 @@ ABaseWeapon::ABaseWeapon()
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+	SetAttackCooltime();
 }
 
 // Called every frame
 void ABaseWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (CurrentAttackCooltime > 0)
+	{
+		CurrentAttackCooltime -= DeltaTime;
+	}
 }
 
 void ABaseWeapon::Fire()
@@ -101,6 +106,26 @@ EWeaponType ABaseWeapon::GetWeaponType()
 UAnimMontage* ABaseWeapon::GetAnimation(EAnimationType AnimationType)
 {
 	return AnimationMap[AnimationType];
+}
+
+bool ABaseWeapon::IsAttackable()
+{
+	return CurrentAttackCooltime <= 0;
+}
+
+void ABaseWeapon::SetCurrentAttackCooltime()
+{
+	CurrentAttackCooltime = MaxAttackCooltime;
+}
+
+void ABaseWeapon::SetAttackCooltime()
+{
+	if (IsAsyncAttackCooltimeWithAnimation)
+	{
+		//MaxAttackCooltime = attack 애니메이션의 길이
+		MaxAttackCooltime = GetAnimation(EAnimationType::Fire)->GetPlayLength();
+	}
+	CurrentAttackCooltime = 0;
 }
 
 void ABaseWeapon::AttachWeapon(AKillingFloorLikeCharacter* TargetCharacter)

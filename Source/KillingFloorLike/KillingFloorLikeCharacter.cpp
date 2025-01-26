@@ -162,7 +162,7 @@ void AKillingFloorLikeCharacter::Fire()
 {
 	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType])
 	{
-		WeaponArray[CurrentWeaponType]->Fire();
+		//WeaponArray[CurrentWeaponType]->Fire();
 
 		ExecWeaponEvent(TEXT("EventFire"));
 	}

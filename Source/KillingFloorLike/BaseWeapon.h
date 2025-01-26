@@ -62,6 +62,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UAnimMontage* GetAnimation(EAnimationType AnimationType);
 
+	UFUNCTION(BlueprintCallable)
+	bool IsAttackable();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentAttackCooltime();
+
 private:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
@@ -82,9 +88,19 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	EWeaponType WeaponType = EWeaponType::Main;
 
-	UPROPERTY(EditAnywhere, Category="Combat")
+	UPROPERTY(EditAnywhere)
 	float GunDamage = 10;
+
+	//true 시 공격 쿨타임이 애니메이션과 동기화 ex)Knife
+	UPROPERTY(EditDefaultsOnly)
+	bool IsAsyncAttackCooltimeWithAnimation = true;
+	UPROPERTY(EditAnywhere)
+	float MaxAttackCooltime;
+	UPROPERTY(EditAnywhere)
+	float CurrentAttackCooltime;
 
 	UPROPERTY(EditAnywhere)
 	TMap<EAnimationType, class UAnimMontage*> AnimationMap;
+
+	void SetAttackCooltime();
 };
