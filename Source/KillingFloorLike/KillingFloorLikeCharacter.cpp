@@ -172,7 +172,8 @@ void AKillingFloorLikeCharacter::Fire()
 
 void AKillingFloorLikeCharacter::ChangeAimType()
 {
-	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType])
+	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType] && GetCurrentWeapon()->
+		IsAimTypeChangeable())
 	{
 		ExecWeaponEvent(TEXT("EventChangeAimType"));
 	}
