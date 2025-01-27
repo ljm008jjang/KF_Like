@@ -24,6 +24,28 @@ enum class EAnimationType : uint8
 	PutDown
 };
 
+UENUM(BlueprintType)
+enum class EAimType : uint8
+{
+	None,
+	Normal,
+	Iron
+};
+
+
+USTRUCT(BlueprintType)
+struct FAttackMontages
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<UAnimMontage*> Montages;
+	UPROPERTY(EditAnywhere)
+	TArray<UAnimMontage*> IronMontages;
+};
+
+
 UCLASS()
 class KILLINGFLOORLIKE_API ABaseWeapon : public AActor
 {
@@ -51,7 +73,7 @@ public:
 
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
-	void Fire();
+	virtual void Fire();
 
 	TSubclassOf<class UAnimInstance> GetAnimInstance();
 
@@ -60,13 +82,37 @@ public:
 	EWeaponType GetWeaponType();
 
 	UFUNCTION(BlueprintCallable)
-	UAnimMontage* GetAnimation(EAnimationType AnimationType);
+	UAnimMontage* GetAnimation(EAnimationType AnimationType, int index);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAttackable();
 
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentAttackCooltime();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetAnimationMaxIndex(EAnimationType type);
+
+	UFUNCTION(BlueprintCallable)
+	EAimType GetCurrentAimType();
+
+	UFUNCTION(BlueprintCallable)
+	bool IsAimTypeChangeable();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentAimType(EAimType NewAimType);
+
+
+protected:
+	/** The Character holding this weapon*/
+	class AKillingFloorLikeCharacter* Character;
+
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category=Projectile)
+	TSubclassOf<class AKillingFloorLikeProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere)
+	float FireDamage = 10;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -78,18 +124,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	USkeletalMesh* SkeletalMesh;
 
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AKillingFloorLikeProjectile> ProjectileClass;
-
-	/** The Character holding this weapon*/
-	class AKillingFloorLikeCharacter* Character;
 
 	UPROPERTY(EditDefaultsOnly)
 	EWeaponType WeaponType = EWeaponType::Main;
 
-	UPROPERTY(EditAnywhere)
-	float GunDamage = 10;
+	UPROPERTY(EditDefaultsOnly)
+	EAimType CurrentAimType = EAimType::Normal;
 
 	//true 시 공격 쿨타임이 애니메이션과 동기화 ex)Knife
 	UPROPERTY(EditDefaultsOnly)
@@ -100,7 +140,7 @@ private:
 	float CurrentAttackCooltime;
 
 	UPROPERTY(EditAnywhere)
-	TMap<EAnimationType, class UAnimMontage*> AnimationMap;
+	TMap<EAnimationType, FAttackMontages> AnimationMap;
 
-	void SetAttackCooltime();
+	void SetAttackCooltime(UAnimMontage* PlayedAnimMontage);
 };

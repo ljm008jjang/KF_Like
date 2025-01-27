@@ -71,6 +71,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* FireAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* ChangeAimTypeAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* DropWeaponAction;
@@ -86,6 +89,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void Fire();
+	void ChangeAimType();
 
 	void DropWeapon();
 	UFUNCTION(BlueprintCallable)

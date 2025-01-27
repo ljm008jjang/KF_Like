@@ -13,5 +13,11 @@ UCLASS()
 class KILLINGFLOORLIKE_API AMeleeWeapon : public ABaseWeapon
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void Fire() override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	float AttackRange = 100;
 };

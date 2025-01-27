@@ -3,10 +3,8 @@
 
 #include "BaseCharacter.h"
 
-#include "KillingFloorLikeGameMode.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
-#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values

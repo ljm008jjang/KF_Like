@@ -102,6 +102,10 @@ void AKillingFloorLikeCharacter::SetupPlayerInputComponent(class UInputComponent
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this,
 		                                   &AKillingFloorLikeCharacter::Fire);
 
+		// Fire
+		EnhancedInputComponent->BindAction(ChangeAimTypeAction, ETriggerEvent::Started, this,
+		                                   &AKillingFloorLikeCharacter::ChangeAimType);
+
 		// DropWeapon
 		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Started, this,
 		                                   &AKillingFloorLikeCharacter::DropWeapon);
@@ -162,9 +166,15 @@ void AKillingFloorLikeCharacter::Fire()
 {
 	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType])
 	{
-		//WeaponArray[CurrentWeaponType]->Fire();
-
 		ExecWeaponEvent(TEXT("EventFire"));
+	}
+}
+
+void AKillingFloorLikeCharacter::ChangeAimType()
+{
+	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType])
+	{
+		ExecWeaponEvent(TEXT("EventChangeAimType"));
 	}
 }
 
@@ -272,7 +282,7 @@ void AKillingFloorLikeCharacter::ExecWeaponEvent(FString EventName)
 	}
 
 	FOutputDeviceNull ar; // 로그 출력을 무시
-	UE_LOG(LogTemp, Display, TEXT("Trying to execute event: %s"), *EventName);
+	//UE_LOG(LogTemp, Display, TEXT("Trying to execute event: %s"), *EventName);
 
 	if (Mesh1P->GetAnimInstance()->CallFunctionByNameWithArguments(*EventName, ar, nullptr, true) == false)
 	{

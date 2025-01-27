@@ -19,7 +19,7 @@ ABaseWeapon::ABaseWeapon()
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	SetAttackCooltime();
+	SetAttackCooltime(GetAnimation(EAnimationType::Fire, 0));
 }
 
 // Called every frame
@@ -39,7 +39,7 @@ void ABaseWeapon::Fire()
 		return;
 	}
 
-	// Try and fire a projectile
+	/*// Try and fire a projectile
 	if (ProjectileClass != nullptr)
 	{
 		UWorld* const World = GetWorld();
@@ -68,7 +68,7 @@ void ABaseWeapon::Fire()
 				projectile->Initialize(GunDamage);
 			}
 		}
-	}
+	}*/
 
 	// Try and play the sound if specified
 	/*if (FireSound != nullptr)
@@ -103,9 +103,16 @@ EWeaponType ABaseWeapon::GetWeaponType()
 	return WeaponType;
 }
 
-UAnimMontage* ABaseWeapon::GetAnimation(EAnimationType AnimationType)
+UAnimMontage* ABaseWeapon::GetAnimation(EAnimationType AnimationType, int index)
 {
-	return AnimationMap[AnimationType];
+	if (CurrentAimType == EAimType::Iron && AnimationType == EAnimationType::Fire)
+	{
+		return AnimationMap[AnimationType].IronMontages[index];
+	}
+	else
+	{
+		return AnimationMap[AnimationType].Montages[index];
+	}
 }
 
 bool ABaseWeapon::IsAttackable()
@@ -118,12 +125,43 @@ void ABaseWeapon::SetCurrentAttackCooltime()
 	CurrentAttackCooltime = MaxAttackCooltime;
 }
 
-void ABaseWeapon::SetAttackCooltime()
+int32 ABaseWeapon::GetAnimationMaxIndex(EAnimationType type)
+{
+	if (CurrentAimType == EAimType::Iron && type == EAnimationType::Fire)
+	{
+		return AnimationMap[type].IronMontages.Num();
+	}
+	else
+	{
+		return AnimationMap[type].Montages.Num();
+	}
+}
+
+EAimType ABaseWeapon::GetCurrentAimType()
+{
+	return CurrentAimType;
+}
+
+bool ABaseWeapon::IsAimTypeChangeable()
+{
+	if (AnimationMap[EAnimationType::Fire].IronMontages.Num() > 0)
+	{
+		return true;
+	}
+	return false;
+}
+
+void ABaseWeapon::SetCurrentAimType(EAimType NewAimType)
+{
+	CurrentAimType = NewAimType;
+}
+
+void ABaseWeapon::SetAttackCooltime(UAnimMontage* PlayedAnimMontage)
 {
 	if (IsAsyncAttackCooltimeWithAnimation)
 	{
 		//MaxAttackCooltime = attack 애니메이션의 길이
-		MaxAttackCooltime = GetAnimation(EAnimationType::Fire)->GetPlayLength();
+		MaxAttackCooltime = PlayedAnimMontage->GetPlayLength();
 	}
 	CurrentAttackCooltime = 0;
 }

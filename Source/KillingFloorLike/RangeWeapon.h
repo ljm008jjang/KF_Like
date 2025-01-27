@@ -14,4 +14,7 @@ class KILLINGFLOORLIKE_API ARangeWeapon : public ABaseWeapon
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void Fire() override;
+	
 };
