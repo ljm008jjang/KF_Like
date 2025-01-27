@@ -82,7 +82,7 @@ public:
 	EWeaponType GetWeaponType();
 
 	UFUNCTION(BlueprintCallable)
-	UAnimMontage* GetAnimation(EAnimationType AnimationType, int index);
+	UAnimMontage* GetAnimation(EAnimationType AnimationType,bool IsIron, int index);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAttackable();
