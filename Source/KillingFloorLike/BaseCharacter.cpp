@@ -88,6 +88,7 @@ void ABaseCharacter::Dead(AActor* DamageCauser)
 	GetMesh()->SetSimulatePhysics(true);
 	FVector Impulse = (GetActorLocation() - DamageCauser->GetActorLocation()) * 100;
 	GetMesh()->AddImpulseToAllBodiesBelow(Impulse);
+	GetMesh()->GetAnimInstance()->StopAllMontages(0);
 
 	if (Controller)
 	{
