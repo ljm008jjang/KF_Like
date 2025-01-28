@@ -73,8 +73,8 @@ public:
 	                         AActor* DamageCauser) override;
 
 
-	UFUNCTION(BlueprintCallable)
-	void HitEffect(const FHitResult& Hit);
+	/*UFUNCTION(BlueprintCallable)
+	void HitEffect(const FHitResult& Hit);*/
 
 	UFUNCTION(BlueprintCallable)
 	float GetMoveSpeed();
