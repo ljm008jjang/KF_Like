@@ -3,14 +3,28 @@
 
 #include "RangeWeapon.h"
 
+#include <string>
+
 #include "KillingFloorLikeCharacter.h"
 #include "KillingFloorLikeProjectile.h"
+
+void ARangeWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+	CurrentLoadedAmmo = MaxLoadedAmmo;
+	SavedAmmo = MaxLoadedAmmo;
+}
 
 void ARangeWeapon::Fire()
 {
 	Super::Fire();
 
 	if (Character == nullptr || Character->GetController() == nullptr)
+	{
+		return;
+	}
+
+	if (CurrentLoadedAmmo <= 0)
 	{
 		return;
 	}
@@ -42,6 +56,7 @@ void ARangeWeapon::Fire()
 			if (projectile)
 			{
 				projectile->Initialize(FireDamage);
+				CurrentLoadedAmmo--;
 			}
 		}
 	}
@@ -62,4 +77,36 @@ void ARangeWeapon::Fire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}*/
+}
+
+void ARangeWeapon::Reload()
+{
+	if (SavedAmmo <= 0)
+	{
+		return;
+	}
+	int32 AllAmmonCount = CurrentLoadedAmmo + SavedAmmo;
+	int32 ReloadAmmoCount = FMath::Min(MaxLoadedAmmo, AllAmmonCount);
+	CurrentLoadedAmmo = ReloadAmmoCount;
+	SavedAmmo = AllAmmonCount - ReloadAmmoCount;
+}
+
+bool ARangeWeapon::IsReloadable()
+{
+	if (CurrentLoadedAmmo >= MaxLoadedAmmo)
+	{
+		return false;
+	}
+
+	if (SavedAmmo <= 0)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+FString ARangeWeapon::GetAmmoText()
+{
+	return FString::FromInt(CurrentLoadedAmmo) + " / " + FString::FromInt(SavedAmmo);
 }

@@ -79,6 +79,9 @@ public:
 	class UInputAction* DropWeaponAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* ReloadWeaponAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* SwapWeaponAction;
 
 protected:
@@ -92,6 +95,9 @@ protected:
 	void ChangeAimType();
 
 	void DropWeapon();
+
+	void ReloadWeapon();
+	
 	UFUNCTION(BlueprintCallable)
 	void OnTriggerSwapWeapon(int ActionValue);
 

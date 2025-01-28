@@ -21,7 +21,8 @@ enum class EAnimationType : uint8
 	None,
 	Fire,
 	Select,
-	PutDown
+	PutDown,
+	Reload
 };
 
 UENUM(BlueprintType)
@@ -82,7 +83,7 @@ public:
 	EWeaponType GetWeaponType();
 
 	UFUNCTION(BlueprintCallable)
-	UAnimMontage* GetAnimation(EAnimationType AnimationType,bool IsIron, int index);
+	UAnimMontage* GetAnimation(EAnimationType AnimationType, bool IsIron, int index);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAttackable();
@@ -101,7 +102,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentAimType(EAimType NewAimType);
-
 
 protected:
 	/** The Character holding this weapon*/

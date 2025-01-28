@@ -110,6 +110,10 @@ void AKillingFloorLikeCharacter::SetupPlayerInputComponent(class UInputComponent
 		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Started, this,
 		                                   &AKillingFloorLikeCharacter::DropWeapon);
 
+		// Reload
+		EnhancedInputComponent->BindAction(ReloadWeaponAction, ETriggerEvent::Started, this,
+										   &AKillingFloorLikeCharacter::ReloadWeapon);
+
 		/*// SwapWeapon
 		EnhancedInputComponent->BindAction(SwapWeaponAction, ETriggerEvent::Started, this,
 		                                   &AKillingFloorLikeCharacter::OnTriggerSwapWeapon);*/
@@ -198,6 +202,11 @@ void AKillingFloorLikeCharacter::DropWeapon()
 		SwapWeapon(Value->GetWeaponType());
 		break;
 	}
+}
+
+void AKillingFloorLikeCharacter::ReloadWeapon()
+{
+	ExecWeaponEvent(TEXT("EventReload"));
 }
 
 void AKillingFloorLikeCharacter::OnTriggerSwapWeapon(int ActionValue)
