@@ -27,7 +27,8 @@ public:
 
 	/** called when projectile hits something */
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	           const FHitResult& Hit);
 
 	/** Returns CollisionComp subobject **/
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
@@ -36,7 +37,10 @@ public:
 
 	void Initialize(float gunDamage);
 
+	UFUNCTION(BlueprintGetter)
+	float GetProjectileDamage();
+
 private:
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetProjectileDamage)
 	float ProjectileDamage;
 };
-

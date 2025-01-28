@@ -52,6 +52,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void Attack();
 
+	const float HeadshotScale = 1.1f;
 
 protected:
 	float MaxHp = 100;
@@ -60,15 +61,20 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float MaxMoveSpeed = 300;
 	float MoveSpeed;
-	
+
 	UPROPERTY(VisibleAnywhere)
 	EUnitType CurrentUnitType = EUnitType::None;
 
 	virtual void Dead(AActor* DamageCauser);
 
 public:
+	UFUNCTION(BlueprintCallable)
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	                         AActor* DamageCauser) override;
+
+
+	UFUNCTION(BlueprintCallable)
+	void HitEffect(const FHitResult& Hit);
 
 	UFUNCTION(BlueprintCallable)
 	float GetMoveSpeed();

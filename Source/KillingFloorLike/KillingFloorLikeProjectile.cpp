@@ -13,7 +13,7 @@ AKillingFloorLikeProjectile::AKillingFloorLikeProjectile()
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
-	CollisionComp->OnComponentHit.AddDynamic(this, &AKillingFloorLikeProjectile::OnHit);
+	//CollisionComp->OnComponentHit.AddDynamic(this, &AKillingFloorLikeProjectile::OnHit);
 	// set up a notification for when this component hits something blocking
 
 	// Players can't walk on it
@@ -35,6 +35,8 @@ AKillingFloorLikeProjectile::AKillingFloorLikeProjectile()
 	InitialLifeSpan = 3.0f;
 }
 
+
+/* In Blueprint
 void AKillingFloorLikeProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
                                         UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -54,8 +56,14 @@ void AKillingFloorLikeProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* Ot
 		Destroy();
 	}
 }
+*/
 
 void AKillingFloorLikeProjectile::Initialize(float gunDamage)
 {
 	ProjectileDamage = gunDamage;
+}
+
+float AKillingFloorLikeProjectile::GetProjectileDamage()
+{
+	return ProjectileDamage;
 }

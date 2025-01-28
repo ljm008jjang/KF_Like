@@ -87,7 +87,7 @@ void ABaseCharacter::Dead(AActor* DamageCauser)
 	GetMesh()->SetCollisionProfileName(TEXT("DeadActor"));
 	GetMesh()->SetSimulatePhysics(true);
 	FVector Impulse = (GetActorLocation() - DamageCauser->GetActorLocation()) * 100;
-	GetMesh()->AddImpulseToAllBodiesBelow(Impulse);
+	//GetMesh()->AddImpulseToAllBodiesBelow(Impulse);
 	GetMesh()->GetAnimInstance()->StopAllMontages(0);
 
 	if (Controller)
@@ -104,6 +104,23 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
                                  AActor* DamageCauser)
 {
 	float realDamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
+	{
+		const FPointDamageEvent* PointDamageEvent = static_cast<const FPointDamageEvent*>(&DamageEvent);
+		if (PointDamageEvent->HitInfo.BoneName.ToString().Contains(TEXT("Head")))
+		{
+			realDamageAmount *= 1.1f; // 맞은 부위가 Head면, 데미지 5배.
+
+			GetMesh()->HideBoneByName(PointDamageEvent->HitInfo.BoneName, PBO_None);
+		}
+	}
+	// RadialDamage 받기.
+	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
+	{
+		const FRadialDamageEvent* RadialDamageEvent = static_cast<const FRadialDamageEvent*>(&DamageEvent);
+	}
+
 	CurrentHp -= realDamageAmount;
 	UE_LOG(LogTemp, Display, TEXT("%f"), CurrentHp);
 	if (CurrentHp <= 0)
@@ -112,6 +129,14 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 	return realDamageAmount;
 }
+
+/*void ABaseCharacter::HitEffect(const FHitResult& Hit)
+{
+	if (Hit.BoneName.ToString().Contains(TEXT("Head")))
+	{
+		GetMesh()->HideBoneByName(Hit.BoneName, PBO_None);
+	}
+}*/
 
 
 float ABaseCharacter::GetMoveSpeed()

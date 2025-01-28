@@ -6,6 +6,36 @@
 #include "BaseCharacter.h"
 #include "Monster.generated.h"
 
+/*UENUM(BlueprintType)
+enum class EHitBoxType : uint8
+{
+	None,
+	Head,
+	L
+};*/
+
+
+UENUM(BlueprintType)
+enum class EMonsterAnimationType : uint8
+{
+	None,
+	Idle,
+	Walk,
+	Run,
+	Attack
+};
+
+USTRUCT(BlueprintType)
+struct FMonsterMontages
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<UAnimMontage*> Montages;
+};
+
+
 UCLASS()
 class KILLINGFLOORLIKE_API AMonster : public ABaseCharacter
 {
@@ -24,6 +54,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	UPROPERTY(EditAnywhere)
+	TMap<EMonsterAnimationType, FMonsterMontages> AnimationMap;
 
 protected:
 	virtual void Dead(AActor* DamageCauser) override;

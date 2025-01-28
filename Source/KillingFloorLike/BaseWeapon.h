@@ -16,7 +16,7 @@ enum class EWeaponType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EAnimationType : uint8
+enum class EWeaponAnimationType : uint8
 {
 	None,
 	Fire,
@@ -83,7 +83,7 @@ public:
 	EWeaponType GetWeaponType();
 
 	UFUNCTION(BlueprintCallable)
-	UAnimMontage* GetAnimation(EAnimationType AnimationType, bool IsIron, int index);
+	UAnimMontage* GetAnimation(EWeaponAnimationType AnimationType, bool IsIron, int index);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAttackable();
@@ -92,7 +92,7 @@ public:
 	void SetCurrentAttackCooltime();
 
 	UFUNCTION(BlueprintCallable)
-	int32 GetAnimationMaxIndex(EAnimationType type);
+	int32 GetAnimationMaxIndex(EWeaponAnimationType type);
 
 	UFUNCTION(BlueprintCallable)
 	EAimType GetCurrentAimType();
@@ -140,7 +140,7 @@ private:
 	float CurrentAttackCooltime;
 
 	UPROPERTY(EditAnywhere)
-	TMap<EAnimationType, FAttackMontages> AnimationMap;
+	TMap<EWeaponAnimationType, FAttackMontages> AnimationMap;
 
 	void SetAttackCooltime(UAnimMontage* PlayedAnimMontage);
 };

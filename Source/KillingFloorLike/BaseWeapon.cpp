@@ -19,7 +19,7 @@ ABaseWeapon::ABaseWeapon()
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	SetAttackCooltime(GetAnimation(EAnimationType::Fire, false, 0));
+	SetAttackCooltime(GetAnimation(EWeaponAnimationType::Fire, false, 0));
 }
 
 // Called every frame
@@ -55,9 +55,9 @@ EWeaponType ABaseWeapon::GetWeaponType()
 	return WeaponType;
 }
 
-UAnimMontage* ABaseWeapon::GetAnimation(EAnimationType AnimationType, bool IsIron, int index)
+UAnimMontage* ABaseWeapon::GetAnimation(EWeaponAnimationType AnimationType, bool IsIron, int index)
 {
-	if (IsIron && AnimationType == EAnimationType::Fire && AnimationMap[AnimationType].IronMontages.Num() > 0)
+	if (IsIron && AnimationType == EWeaponAnimationType::Fire && AnimationMap[AnimationType].IronMontages.Num() > 0)
 	{
 		return AnimationMap[AnimationType].IronMontages[index];
 	}
@@ -77,9 +77,9 @@ void ABaseWeapon::SetCurrentAttackCooltime()
 	CurrentAttackCooltime = MaxAttackCooltime;
 }
 
-int32 ABaseWeapon::GetAnimationMaxIndex(EAnimationType type)
+int32 ABaseWeapon::GetAnimationMaxIndex(EWeaponAnimationType type)
 {
-	if (CurrentAimType == EAimType::Iron && type == EAnimationType::Fire)
+	if (CurrentAimType == EAimType::Iron && type == EWeaponAnimationType::Fire)
 	{
 		return AnimationMap[type].IronMontages.Num();
 	}
@@ -96,7 +96,7 @@ EAimType ABaseWeapon::GetCurrentAimType()
 
 bool ABaseWeapon::IsAimTypeChangeable()
 {
-	if (AnimationMap[EAnimationType::Fire].IronMontages.Num() > 0)
+	if (AnimationMap[EWeaponAnimationType::Fire].IronMontages.Num() > 0)
 	{
 		return true;
 	}
