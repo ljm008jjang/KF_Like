@@ -36,9 +36,11 @@ private:
 	TArray<AMonster*> Monsters;
 
 public:
-	void SpawnMonster();
+	void SpawnMonster(EMonsterType SelectedMonster);
 
 	int GetAliveMonsterCount();
 
 	void ClearUnitDB();
+
+	TArray<AActor*> GetSpawnPoints();
 };

@@ -25,18 +25,17 @@ void AUnitManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AUnitManager::SpawnMonster()
+void AUnitManager::SpawnMonster(EMonsterType SelectedMonster)
 {
-	for (AActor* Point : SpawnPoints)
-	{
-		FActorSpawnParameters params;
-		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		AMonster* SpawnAnimal = GetWorld()->SpawnActor<AMonster>(MonsterClass[EMonsterType::Clot],
-		                                                         Point->GetActorLocation(),
-		                                                         Point->GetActorRotation(), params);
-		SpawnAnimal->SpawnDefaultController();
-		Monsters.Add(SpawnAnimal);
-	}
+	AActor* SpawnPoint = SpawnPoints[FMath::RandHelper(SpawnPoints.Num())];
+
+	FActorSpawnParameters params;
+	params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	AMonster* SpawnAnimal = GetWorld()->SpawnActor<AMonster>(MonsterClass[SelectedMonster],
+	                                                         SpawnPoint->GetActorLocation(),
+	                                                         SpawnPoint->GetActorRotation(), params);
+	SpawnAnimal->SpawnDefaultController();
+	Monsters.Add(SpawnAnimal);
 }
 
 //TODO 매 프레임 체크해야하는 것 같은데?
@@ -56,4 +55,9 @@ int AUnitManager::GetAliveMonsterCount()
 void AUnitManager::ClearUnitDB()
 {
 	Monsters.Empty();
+}
+
+TArray<AActor*> AUnitManager::GetSpawnPoints()
+{
+	return SpawnPoints;
 }

@@ -23,7 +23,8 @@ AKillingFloorLikeGameMode::AKillingFloorLikeGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 	PrimaryActorTick.bCanEverTick = true;
 
-	WaveIndex = 0;
+	CurrentWave = 0;
+	MaxSpawnedMonsters = 16;
 }
 
 void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
@@ -38,7 +39,7 @@ void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
 
 	if (CurrentModeType == EModeType::Wave)
 	{
-		if (MonsterSpawnCount <= 0)
+		if (MonsterPool.Num() <= 0)
 		{
 			if (UnitManager->GetAliveMonsterCount() <= 0)
 			{
@@ -48,7 +49,7 @@ void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
 		}
 
 		WaveDelayTime -= DeltaSeconds;
-		if (WaveDelayTime <= 0)
+		if (UnitManager->GetAliveMonsterCount() <= 0 || WaveDelayTime <= 0)
 		{
 			SpawnMonster();
 			WaveDelayTime = MaxWaveTime;
@@ -68,25 +69,47 @@ void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
 
 void AKillingFloorLikeGameMode::StartWave()
 {
-	WaveIndex++;
-	MonsterSpawnCount = MaxMonsterSpawnCount;
+	CurrentWave++;
 	WaveDelayTime = 0;
 	UnitManager->ClearUnitDB();
+	RefillMonsterPool();
 	ChangeModeType(EModeType::Wave);
 	UE_LOG(LogTemp, Warning, TEXT("Start Wave"))
 }
 
 void AKillingFloorLikeGameMode::SpawnMonster()
 {
-	MonsterSpawnCount--;
-	UnitManager->SpawnMonster();
+	if (MonsterPool.Num() == 0)
+	{
+		return;
+	}
+
+	// Select Monster Type from Pool
+	TArray<EMonsterType> Keys;
+	MonsterPool.GetKeys(Keys);
+	EMonsterType SelectedMonster = Keys[FMath::RandHelper(Keys.Num())];
+
+	if (MonsterPool[SelectedMonster] <= 0)
+	{
+		MonsterPool.Remove(SelectedMonster);
+		return;
+	}
+
+	// Find Spawn Point
+	AActor* SpawnPoint = UnitManager->GetSpawnPoints()[FMath::RandHelper(UnitManager->GetSpawnPoints().Num())];
+
+
+	// Spawn the Monster
+	//GetWorld()->SpawnActor<AActor>(MonsterClasses[SelectedMonster], SpawnPoint->GetActorLocation(), SpawnPoint->GetActorRotation());
+	UnitManager->SpawnMonster(SelectedMonster);
+	MonsterPool[SelectedMonster]--;
 }
 
 void AKillingFloorLikeGameMode::EndWave(bool IsWin)
 {
 	if (IsWin)
 	{
-		if (WaveIndex > MaxWaveIndex)
+		if (CurrentWave > MaxWaveIndex)
 		{
 			EndMatch(true);
 			return;
@@ -121,4 +144,22 @@ void AKillingFloorLikeGameMode::EndMatch(bool IsWin)
 void AKillingFloorLikeGameMode::ChangeModeType(EModeType NewModeType)
 {
 	CurrentModeType = NewModeType;
+}
+
+void AKillingFloorLikeGameMode::RefillMonsterPool()
+{
+	// Adjust Monster Counts Based on Current Wave
+	MonsterPool.Add(EMonsterType::Clot, 0);
+	MonsterPool.Add(EMonsterType::Gorefast, 0);
+	MonsterPool[EMonsterType::Clot] = FMath::RoundToInt(CurrentWave * 2.0f);
+	MonsterPool[EMonsterType::Gorefast] = FMath::RoundToInt(CurrentWave * 1.5f);
+
+	if (CurrentWave >= 5)
+	{
+		MonsterPool.Add(EMonsterType::Scrake, FMath::RoundToInt(CurrentWave * 0.5f));
+	}
+	if (CurrentWave >= 7)
+	{
+		MonsterPool.Add(EMonsterType::Fleshpound, FMath::RoundToInt(CurrentWave * 0.3f));
+	}
 }

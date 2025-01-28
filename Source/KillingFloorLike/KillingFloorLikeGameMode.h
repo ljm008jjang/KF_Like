@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "KillingFloorLikeGameMode.generated.h"
 
+enum class EMonsterType : uint8;
 class AUnitManager;
 
 UENUM(BlueprintType)
@@ -35,15 +36,14 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 private:
-	int MaxWaveIndex = 10;
-	int WaveIndex = 0;
+	int32 MaxWaveIndex = 10;
+	int32 CurrentWave = 0;
 
-	float MaxWaveTime = 10;
+	float MaxWaveTime = 3;
 	float WaveDelayTime = 0;
 
-	int32 MaxMonsterSpawnCount = 1;
-	//몬스터 스폰 횟수.
-	int32 MonsterSpawnCount = 0;
+	UPROPERTY()
+	int32 MaxSpawnedMonsters;
 
 	float MaxBreakTime = 10;
 	float BreakTime = 0;
@@ -52,6 +52,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	AUnitManager* UnitManager;
+
+	UPROPERTY(EditAnywhere)
+	TMap<EMonsterType, int32> MonsterPool;
 
 	UFUNCTION(BlueprintCallable)
 	void StartWave();
@@ -64,4 +67,7 @@ private:
 	void EndMatch(bool IsWin);
 
 	void ChangeModeType(EModeType NewModeType);
+
+	// Check and Refill Pool Function
+	void RefillMonsterPool();
 };
