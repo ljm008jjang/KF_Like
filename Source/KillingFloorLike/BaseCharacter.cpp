@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -67,8 +68,13 @@ void ABaseCharacter::Attack()
 				ABaseCharacter* FoundBaseCharacter = Cast<ABaseCharacter>(FoundActor);
 				if (FoundBaseCharacter && IsAttackableUnitType(FoundBaseCharacter))
 				{
-					FDamageEvent DamageEvent;
-					FoundBaseCharacter->TakeDamage(BaseAttackDamage, DamageEvent, GetInstigatorController(), this);
+					UGameplayStatics::ApplyDamage(
+						FoundBaseCharacter,
+						BaseAttackDamage,
+						GetInstigatorController(),
+						this,
+						UDamageType::StaticClass()
+					);
 					UE_LOG(LogTemp, Log, TEXT("%s"), *FoundBaseCharacter -> GetName());
 				}
 			}

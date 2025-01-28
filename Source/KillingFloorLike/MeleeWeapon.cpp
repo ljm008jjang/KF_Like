@@ -5,6 +5,7 @@
 
 #include "KillingFloorLikeCharacter.h"
 #include "Engine/DamageEvents.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void AMeleeWeapon::Fire()
@@ -46,8 +47,13 @@ void AMeleeWeapon::Fire()
 				ABaseCharacter* FoundBaseCharacter = Cast<ABaseCharacter>(FoundActor);
 				if (FoundBaseCharacter && Character->IsAttackableUnitType(FoundBaseCharacter))
 				{
-					FDamageEvent DamageEvent;
-					FoundBaseCharacter->TakeDamage(FireDamage, DamageEvent, GetInstigatorController(), this);
+					UGameplayStatics::ApplyDamage(
+						FoundBaseCharacter,
+						FireDamage,
+						GetInstigatorController(),
+						this,
+						UDamageType::StaticClass()
+					);
 					UE_LOG(LogTemp, Log, TEXT("%s"), *FoundBaseCharacter -> GetName());
 				}
 			}
