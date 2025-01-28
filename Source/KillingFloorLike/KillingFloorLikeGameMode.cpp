@@ -68,6 +68,7 @@ void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
 
 void AKillingFloorLikeGameMode::StartWave()
 {
+	WaveIndex++;
 	MonsterSpawnCount = MaxMonsterSpawnCount;
 	WaveDelayTime = 0;
 	UnitManager->ClearUnitDB();
@@ -85,7 +86,6 @@ void AKillingFloorLikeGameMode::EndWave(bool IsWin)
 {
 	if (IsWin)
 	{
-		WaveIndex++;
 		if (WaveIndex > MaxWaveIndex)
 		{
 			EndMatch(true);

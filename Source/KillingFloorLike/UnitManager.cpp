@@ -31,7 +31,8 @@ void AUnitManager::SpawnMonster()
 	{
 		FActorSpawnParameters params;
 		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		AMonster* SpawnAnimal = GetWorld()->SpawnActor<AMonster>(MonsterClass, Point->GetActorLocation(),
+		AMonster* SpawnAnimal = GetWorld()->SpawnActor<AMonster>(MonsterClass[EMonsterType::Clot],
+		                                                         Point->GetActorLocation(),
 		                                                         Point->GetActorRotation(), params);
 		SpawnAnimal->SpawnDefaultController();
 		Monsters.Add(SpawnAnimal);

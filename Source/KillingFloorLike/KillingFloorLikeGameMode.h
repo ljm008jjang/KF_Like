@@ -41,9 +41,9 @@ private:
 	float MaxWaveTime = 10;
 	float WaveDelayTime = 0;
 
-	int MaxMonsterSpawnCount = 1;
+	int32 MaxMonsterSpawnCount = 1;
 	//몬스터 스폰 횟수.
-	int MonsterSpawnCount = 0;
+	int32 MonsterSpawnCount = 0;
 
 	float MaxBreakTime = 10;
 	float BreakTime = 0;

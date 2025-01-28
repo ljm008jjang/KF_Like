@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "UnitManager.generated.h"
 
+enum class EMonsterType : uint8;
+
 UCLASS()
 class KILLINGFLOORLIKE_API AUnitManager : public AActor
 {
@@ -28,7 +30,7 @@ private:
 	TArray<AActor*> SpawnPoints;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AMonster> MonsterClass;
+	TMap<EMonsterType, TSubclassOf<class AMonster>> MonsterClass;
 
 	UPROPERTY(VisibleAnywhere)
 	TArray<AMonster*> Monsters;
@@ -37,6 +39,6 @@ public:
 	void SpawnMonster();
 
 	int GetAliveMonsterCount();
-	
+
 	void ClearUnitDB();
 };

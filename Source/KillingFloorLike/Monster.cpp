@@ -33,3 +33,23 @@ void AMonster::Dead(AActor* DamageCauser)
 
 	InitialLifeSpan = 3.0f;
 }
+
+UAnimMontage* AMonster::GetAnimationMontage(EMonsterAnimationType animType, int32 index)
+{
+	return AnimationMap[animType].Montages[index];
+}
+
+int32 AMonster::GetAnimationMaxIndex(EMonsterAnimationType animType)
+{
+	return AnimationMap[animType].Montages.Num();
+}
+
+EMonsterType AMonster::GetMonsterType()
+{
+	return MonsterType;
+}
+
+/*void AMonster::SetMonsterType(EMonsterType NewMonsterType)
+{
+	MonsterType = NewMonsterType;
+}*/

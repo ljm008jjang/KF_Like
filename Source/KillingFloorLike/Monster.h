@@ -14,6 +14,19 @@ enum class EHitBoxType : uint8
 	L
 };*/
 
+UENUM(BlueprintType)
+enum class EMonsterType : uint8
+{
+	None,
+	Clot,
+	Gorefast,
+	Stalker,
+	Crawler,
+	Husk,
+	Scrake,
+	Fleshpound,
+};
+
 
 UENUM(BlueprintType)
 enum class EMonsterAnimationType : uint8
@@ -57,6 +70,24 @@ private:
 	UPROPERTY(EditAnywhere)
 	TMap<EMonsterAnimationType, FMonsterMontages> AnimationMap;
 
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetMonsterType)
+	EMonsterType MonsterType;
+
 protected:
 	virtual void Dead(AActor* DamageCauser) override;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	UAnimMontage* GetAnimationMontage(EMonsterAnimationType animType, int32 index);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetAnimationMaxIndex(EMonsterAnimationType animType);
+
+
+	UFUNCTION(BlueprintGetter)
+	EMonsterType GetMonsterType();
+
+	/*
+	UFUNCTION(BlueprintSetter)
+	void SetMonsterType(EMonsterType NewMonsterType);*/
 };

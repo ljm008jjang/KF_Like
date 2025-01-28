@@ -13,7 +13,7 @@ enum class EWeaponType : uint8
 	Main,
 	Sub,
 	Knife
-};
+}; 
 
 UENUM(BlueprintType)
 enum class EWeaponAnimationType : uint8
