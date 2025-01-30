@@ -25,6 +25,8 @@ enum class EMonsterType : uint8
 	Husk,
 	Scrake,
 	Fleshpound,
+	Siren,
+	Bloat
 };
 
 

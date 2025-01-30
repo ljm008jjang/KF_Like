@@ -46,7 +46,7 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float BaseAttackDamage = 10;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintGetter = GetCurrentUnitState)
 	EUnitState CurrentUnitState = EUnitState::None;
 
 	UFUNCTION(BlueprintCallable)
@@ -79,7 +79,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetMoveSpeed();
 
+	UFUNCTION(BlueprintGetter)
 	EUnitState GetCurrentUnitState();
+	
+	UFUNCTION(BlueprintCallable)
+	bool GetIsAlive();
+	
 	EUnitType GetCurrentUnitType();
 	bool IsAttackableUnitType(ABaseCharacter* AttackedUnit);
 };

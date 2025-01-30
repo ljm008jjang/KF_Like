@@ -30,8 +30,6 @@ void AMonster::Tick(float DeltaTime)
 void AMonster::Dead(AActor* DamageCauser)
 {
 	Super::Dead(DamageCauser);
-
-	InitialLifeSpan = 3.0f;
 }
 
 UAnimMontage* AMonster::GetAnimationMontage(EMonsterAnimationType animType, int32 index)

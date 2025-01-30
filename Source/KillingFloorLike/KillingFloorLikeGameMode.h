@@ -42,7 +42,6 @@ private:
 	float MaxWaveTime = 3;
 	float WaveDelayTime = 0;
 
-	UPROPERTY()
 	int32 MaxSpawnedMonsters;
 
 	float MaxBreakTime = 10;
@@ -50,7 +49,7 @@ private:
 
 	EModeType CurrentModeType = EModeType::None;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetUnitManager)
 	AUnitManager* UnitManager;
 
 	UPROPERTY(EditAnywhere)
@@ -70,4 +69,11 @@ private:
 
 	// Check and Refill Pool Function
 	void RefillMonsterPool();
+
+public:
+	UFUNCTION(BlueprintGetter)
+	AUnitManager* GetUnitManager();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetWaveRemainMonsterCount();
 };

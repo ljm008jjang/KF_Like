@@ -94,7 +94,10 @@ void ABaseCharacter::Dead(AActor* DamageCauser)
 	GetMesh()->SetSimulatePhysics(true);
 	FVector Impulse = (GetActorLocation() - DamageCauser->GetActorLocation()) * 100;
 	//GetMesh()->AddImpulseToAllBodiesBelow(Impulse);
-	GetMesh()->GetAnimInstance()->StopAllMontages(0);
+	if (GetMesh()->GetAnimInstance())
+	{
+		GetMesh()->GetAnimInstance()->StopAllMontages(0);
+	}
 
 	if (Controller)
 	{
@@ -153,6 +156,11 @@ float ABaseCharacter::GetMoveSpeed()
 EUnitState ABaseCharacter::GetCurrentUnitState()
 {
 	return CurrentUnitState;
+}
+
+bool ABaseCharacter::GetIsAlive()
+{
+	return CurrentUnitState != EUnitState::Dead;
 }
 
 EUnitType ABaseCharacter::GetCurrentUnitType()
