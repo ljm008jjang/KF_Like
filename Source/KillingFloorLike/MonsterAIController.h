@@ -14,7 +14,16 @@ class KILLINGFLOORLIKE_API AMonsterAIController : public AAIController
 {
 	GENERATED_BODY()
 
+/*public:
+	AMonsterAIController();
+
+private:
+	class UAIPerceptionComponent* AIPerception;
+	class UAISenseConfig_Sight* SightConfig;*/
+
 public:
+
+	
 	void OnDead();
 	
 };

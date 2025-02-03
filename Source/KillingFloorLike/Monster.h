@@ -37,7 +37,8 @@ enum class EMonsterAnimationType : uint8
 	Idle,
 	Walk,
 	Run,
-	Attack
+	Attack,
+	Hit
 };
 
 USTRUCT(BlueprintType)
@@ -68,6 +69,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/*virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	                         AActor* DamageCauser) override;*/
+
 private:
 	UPROPERTY(EditAnywhere)
 	TMap<EMonsterAnimationType, FMonsterMontages> AnimationMap;
@@ -84,6 +88,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetAnimationMaxIndex(EMonsterAnimationType animType);
+
+		
+	UFUNCTION(BlueprintCallable)
+	UAnimMontage* GetHitAnimMontage(AActor* DamageCauser);
 
 
 	UFUNCTION(BlueprintGetter)
