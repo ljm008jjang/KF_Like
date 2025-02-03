@@ -51,6 +51,18 @@ public:
 	TArray<UAnimMontage*> Montages;
 };
 
+UENUM(BlueprintType)
+enum class EMonsterSoundType : uint8
+{
+	None,
+	Idle,
+	Walk,
+	Run,
+	Attack,
+	Hit,
+	Dead
+};
+
 
 UCLASS()
 class KILLINGFLOORLIKE_API AMonster : public ABaseCharacter
@@ -76,6 +88,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	TMap<EMonsterAnimationType, FMonsterMontages> AnimationMap;
 
+	UPROPERTY(EditAnywhere)
+	TMap<EMonsterSoundType, USoundBase*> SoundMap;
+
 	UPROPERTY(EditAnywhere, BlueprintGetter = GetMonsterType)
 	EMonsterType MonsterType;
 
@@ -92,6 +107,9 @@ public:
 		
 	UFUNCTION(BlueprintCallable)
 	UAnimMontage* GetHitAnimMontage(AActor* DamageCauser);
+
+	UFUNCTION(BlueprintCallable)
+	USoundBase* GetSoundBase(EMonsterSoundType SoundType);
 
 
 	UFUNCTION(BlueprintGetter)

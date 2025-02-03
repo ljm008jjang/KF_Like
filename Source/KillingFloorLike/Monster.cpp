@@ -115,6 +115,11 @@ UAnimMontage* AMonster::GetHitAnimMontage(AActor* DamageCauser)
 	return Montage;
 }
 
+USoundBase* AMonster::GetSoundBase(EMonsterSoundType SoundType)
+{
+	return SoundMap[SoundType];
+}
+
 EMonsterType AMonster::GetMonsterType()
 {
 	return MonsterType;
