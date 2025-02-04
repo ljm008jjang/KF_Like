@@ -76,4 +76,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetWaveRemainMonsterCount();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode Events")
+	void OnUpdateRemainMonsterCount();
 };

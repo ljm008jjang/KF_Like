@@ -73,6 +73,7 @@ void AKillingFloorLikeGameMode::StartWave()
 	UnitManager->ClearUnitDB();
 	RefillMonsterPool();
 	ChangeModeType(EModeType::Wave);
+	OnUpdateRemainMonsterCount();
 	UE_LOG(LogTemp, Warning, TEXT("Start Wave"))
 }
 

@@ -3,9 +3,11 @@
 
 #include "BaseCharacter.h"
 
+#include "KillingFloorLikeGameMode.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -157,6 +159,12 @@ void ABaseCharacter::ChangeUnitState(EUnitState NewUnitState)
 	else if (CurrentUnitState == EUnitState::Run)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	}
+	else if (CurrentUnitState == EUnitState::Dead)
+	{
+		AKillingFloorLikeGameMode* GameMode = Cast<
+			AKillingFloorLikeGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		GameMode->OnUpdateRemainMonsterCount();
 	}
 }
 
