@@ -38,24 +38,32 @@ void AUnitManager::SpawnMonster(EMonsterType SelectedMonster)
 	Monsters.Add(SpawnAnimal);
 }
 
+
 //TODO 매 프레임 체크해야하는 것 같은데?
-int AUnitManager::GetSpawnedMonsterCount(EUnitState State)
+int AUnitManager::GetSpawnedMonsterCount(bool IsAlive)
 {
 	int Result = 0;
-	if (State == EUnitState::None)
-	{
-		Result = Monsters.Num();
-	}
-	else
+
+	if(IsAlive)
 	{
 		for (AMonster* Monster : Monsters)
 		{
-			if (Monster->GetCurrentUnitState() == State)
+			if (Monster->GetCurrentUnitState() != EUnitState::Dead)
+			{
+				Result++;
+			}
+		}
+	}else
+	{
+		for (AMonster* Monster : Monsters)
+		{
+			if (Monster->GetCurrentUnitState() == EUnitState::Dead)
 			{
 				Result++;
 			}
 		}
 	}
+	
 	return Result;
 }
 

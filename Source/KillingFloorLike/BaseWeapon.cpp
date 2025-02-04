@@ -108,6 +108,11 @@ void ABaseWeapon::SetCurrentAimType(EAimType NewAimType)
 	CurrentAimType = NewAimType;
 }
 
+USoundBase* ABaseWeapon::GetSoundBase(EWeaponSoundType SoundType, int32 index)
+{
+	return SoundMap[SoundType].SoundBases[index];
+}
+
 void ABaseWeapon::SetAttackCooltime(UAnimMontage* PlayedAnimMontage)
 {
 	if (IsAsyncAttackCooltimeWithAnimation)

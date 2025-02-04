@@ -46,6 +46,26 @@ public:
 	TArray<UAnimMontage*> IronMontages;
 };
 
+UENUM(BlueprintType)
+enum class EWeaponSoundType : uint8
+{
+	None,
+	Fire,
+	Hit,
+	Select,
+	PutDown,
+	Reload
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponSoundBases
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<USoundBase*> SoundBases;
+};
 
 UCLASS()
 class KILLINGFLOORLIKE_API ABaseWeapon : public AActor
@@ -103,6 +123,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentAimType(EAimType NewAimType);
 
+	//normal -> index = 0
+	//Hit 사운드는 0 = 안맞음
+	// 1 = 무기체에 맞음
+	// 2 = 몬스터에 맞음
+	UFUNCTION(BlueprintCallable)
+	USoundBase* GetSoundBase(EWeaponSoundType SoundType, int32 index);
+
 protected:
 	/** The Character holding this weapon*/
 	class AKillingFloorLikeCharacter* Character;
@@ -141,6 +168,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TMap<EWeaponAnimationType, FAttackMontages> AnimationMap;
+
+	UPROPERTY(EditAnywhere)
+	TMap<EWeaponSoundType, FWeaponSoundBases> SoundMap;
 
 	void SetAttackCooltime(UAnimMontage* PlayedAnimMontage);
 };

@@ -54,13 +54,14 @@ void AMeleeWeapon::Fire()
 						this,
 						UDamageType::StaticClass()
 					);
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 2),
+					                                      FoundBaseCharacter->GetActorLocation());
 					UE_LOG(LogTemp, Log, TEXT("%s"), *FoundBaseCharacter -> GetName());
+					return;
 				}
 			}
 		}
 	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("No actors found in radius."));
-	}
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 0), GetActorLocation());
 }

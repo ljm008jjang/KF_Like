@@ -39,7 +39,7 @@ public:
 	void SpawnMonster(EMonsterType SelectedMonster);
 
 	UFUNCTION(BlueprintCallable)
-	int GetSpawnedMonsterCount(EUnitState State);
+	int GetSpawnedMonsterCount(bool IsAlive);
 
 	void ClearUnitDB();
 

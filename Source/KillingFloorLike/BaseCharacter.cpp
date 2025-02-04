@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -20,7 +21,8 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentHp = MaxHp;
-	CurrentUnitState = EUnitState::Alive;
+	ChangeUnitState(EUnitState::Idle);
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 // Called every frame
@@ -105,7 +107,7 @@ void ABaseCharacter::Dead(AActor* DamageCauser)
 		Controller->UnPossess(); // Possess된 Pawn에서 Controller 분리
 	}
 
-	CurrentUnitState = EUnitState::Dead;
+	ChangeUnitState(EUnitState::Dead);
 	/*Cast<AKillingFloorLikeGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->;*/
 }
 
@@ -139,6 +141,25 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	return realDamageAmount;
 }
 
+void ABaseCharacter::ChangeUnitState(EUnitState NewUnitState)
+{
+	if (CurrentUnitState == NewUnitState)
+	{
+		return;
+	}
+
+	CurrentUnitState = NewUnitState;
+
+	if (CurrentUnitState == EUnitState::Walk)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
+	else if (CurrentUnitState == EUnitState::Run)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	}
+}
+
 /*void ABaseCharacter::HitEffect(const FHitResult& Hit)
 {
 	if (Hit.BoneName.ToString().Contains(TEXT("Head")))
@@ -148,11 +169,6 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 }*/
 
 
-float ABaseCharacter::GetMoveSpeed()
-{
-	return MoveSpeed;
-}
-
 EUnitState ABaseCharacter::GetCurrentUnitState()
 {
 	return CurrentUnitState;
@@ -160,7 +176,7 @@ EUnitState ABaseCharacter::GetCurrentUnitState()
 
 bool ABaseCharacter::GetIsAlive()
 {
-	return CurrentUnitState != EUnitState::Dead;
+	return GetCurrentUnitState() != EUnitState::Dead;
 }
 
 EUnitType ABaseCharacter::GetCurrentUnitType()

@@ -10,7 +10,9 @@ UENUM(BlueprintType)
 enum class EUnitState : uint8
 {
 	None,
-	Alive,
+	Idle,
+	Walk,
+	Run,
 	Dead
 };
 
@@ -57,10 +59,11 @@ private:
 protected:
 	float MaxHp = 100;
 	float CurrentHp;
-
+	
 	UPROPERTY(EditAnywhere)
-	float MaxMoveSpeed = 300;
-	float MoveSpeed;
+	float WalkSpeed;
+	UPROPERTY(EditAnywhere)
+	float RunSpeed;
 
 	UPROPERTY(VisibleAnywhere)
 	EUnitType CurrentUnitType = EUnitType::None;
@@ -73,7 +76,7 @@ public:
 	                         AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintCallable)
-	float GetMoveSpeed();
+	void ChangeUnitState(EUnitState NewUnitState);
 
 	UFUNCTION(BlueprintGetter)
 	EUnitState GetCurrentUnitState();

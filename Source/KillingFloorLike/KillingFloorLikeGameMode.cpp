@@ -40,7 +40,7 @@ void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
 	{
 		if (MonsterPool.Num() <= 0)
 		{
-			if (UnitManager->GetSpawnedMonsterCount(EUnitState::Alive) <= 0)
+			if (UnitManager->GetSpawnedMonsterCount(true) <= 0)
 			{
 				EndWave(true);
 			}
@@ -48,7 +48,7 @@ void AKillingFloorLikeGameMode::Tick(float DeltaSeconds)
 		}
 
 		WaveDelayTime -= DeltaSeconds;
-		if (UnitManager->GetSpawnedMonsterCount(EUnitState::Alive) <= 0 || WaveDelayTime <= 0)
+		if (UnitManager->GetSpawnedMonsterCount(true) <= 0 || WaveDelayTime <= 0)
 		{
 			SpawnMonster();
 			WaveDelayTime = MaxWaveTime;
@@ -159,15 +159,15 @@ void AKillingFloorLikeGameMode::RefillMonsterPool()
 	MonsterPool.Add(EMonsterType::Siren, 0);
 	MonsterPool.Add(EMonsterType::Bloat, 0);
 
-	MonsterPool[EMonsterType::Clot] = 1;
 	MonsterPool[EMonsterType::Gorefast] = 1;
+	/*MonsterPool[EMonsterType::Gorefast] = 1;
 	MonsterPool[EMonsterType::Stalker] = 1;
 	MonsterPool[EMonsterType::Crawler] = 1;
 	MonsterPool[EMonsterType::Husk] = 1;
 	MonsterPool[EMonsterType::Scrake] = 1;
 	MonsterPool[EMonsterType::Fleshpound] = 1;
 	MonsterPool[EMonsterType::Siren] = 1;
-	MonsterPool[EMonsterType::Bloat] = 1;
+	MonsterPool[EMonsterType::Bloat] = 1;*/
 
 
 	/*MonsterPool[EMonsterType::Clot] = FMath::RoundToInt(CurrentWave * 2.0f);
@@ -196,5 +196,5 @@ AUnitManager* AKillingFloorLikeGameMode::GetUnitManager()
 
 int32 AKillingFloorLikeGameMode::GetWaveRemainMonsterCount()
 {
-	return MaxSpawnedMonsters - UnitManager->GetSpawnedMonsterCount(EUnitState::Dead);
+	return MaxSpawnedMonsters - UnitManager->GetSpawnedMonsterCount(false);
 }
