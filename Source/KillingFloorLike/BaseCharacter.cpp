@@ -143,6 +143,11 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	return realDamageAmount;
 }
 
+float ABaseCharacter::GetCurrentHP()
+{
+	return CurrentHp;
+}
+
 void ABaseCharacter::ChangeUnitState(EUnitState NewUnitState)
 {
 	if (CurrentUnitState == NewUnitState)

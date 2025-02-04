@@ -58,6 +58,7 @@ private:
 
 protected:
 	float MaxHp = 100;
+	UPROPERTY(BlueprintGetter = GetCurrentHP)
 	float CurrentHp;
 	
 	UPROPERTY(EditAnywhere)
@@ -74,6 +75,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	                         AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintGetter)
+	float GetCurrentHP();
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeUnitState(EUnitState NewUnitState);
