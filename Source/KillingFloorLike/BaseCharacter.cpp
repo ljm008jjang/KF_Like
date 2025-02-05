@@ -143,9 +143,19 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	return realDamageAmount;
 }
 
+float ABaseCharacter::GetMaxHP()
+{
+	return MaxHp;
+}
+
 float ABaseCharacter::GetCurrentHP()
 {
 	return CurrentHp;
+}
+
+float ABaseCharacter::GetHpRatio()
+{
+	return CurrentHp / MaxHp;
 }
 
 void ABaseCharacter::ChangeUnitState(EUnitState NewUnitState)

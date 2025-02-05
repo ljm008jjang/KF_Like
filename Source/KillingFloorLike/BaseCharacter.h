@@ -57,6 +57,7 @@ private:
 	const float HeadshotScale = 1.1f;
 
 protected:
+	UPROPERTY(BlueprintGetter = GetMaxHP)
 	float MaxHp = 100;
 	UPROPERTY(BlueprintGetter = GetCurrentHP)
 	float CurrentHp;
@@ -77,7 +78,13 @@ public:
 	                         AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintGetter)
+	float GetMaxHP();
+
+	UFUNCTION(BlueprintGetter)
 	float GetCurrentHP();
+
+	UFUNCTION(BlueprintCallable)
+	float GetHpRatio();
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeUnitState(EUnitState NewUnitState);
@@ -90,4 +97,7 @@ public:
 	
 	EUnitType GetCurrentUnitType();
 	bool IsAttackableUnitType(ABaseCharacter* AttackedUnit);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Character Events")
+	void OnAttackEvent();
 };
