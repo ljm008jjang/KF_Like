@@ -160,7 +160,7 @@ void AKillingFloorLikeGameMode::RefillMonsterPool()
 	MonsterPool.Add(EMonsterType::Siren, 0);
 	MonsterPool.Add(EMonsterType::Bloat, 0);
 
-	MonsterPool[EMonsterType::Fleshpound] = 1;
+	MonsterPool[EMonsterType::Husk] = 1;
 	/*MonsterPool[EMonsterType::Gorefast] = 1;
 	MonsterPool[EMonsterType::Stalker] = 1;
 	MonsterPool[EMonsterType::Crawler] = 1;

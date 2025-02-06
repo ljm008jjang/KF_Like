@@ -96,6 +96,8 @@ public:
 	bool GetIsAlive();
 	
 	EUnitType GetCurrentUnitType();
+
+	UFUNCTION(BlueprintCallable)
 	bool IsAttackableUnitType(ABaseCharacter* AttackedUnit);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Character Events")

@@ -142,6 +142,8 @@ void ABaseWeapon::AttachWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
 	Character->PickUpWeapon(this);
+
+	SetOwner(TargetCharacter);
 }
 
 void ABaseWeapon::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter)
@@ -156,4 +158,6 @@ void ABaseWeapon::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 	                             nullptr, ETeleportType::TeleportPhysics);
 	StaticMeshComponent->SetSimulatePhysics(true);
 	StaticMeshComponent->AddImpulse(TargetCharacter->GetActorForwardVector() * 3000);
+
+	SetOwner(nullptr);
 }

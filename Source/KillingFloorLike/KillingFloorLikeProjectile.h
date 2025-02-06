@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "KillingFloorLikeProjectile.generated.h"
 
+class ABaseCharacter;
 class USphereComponent;
 class UProjectileMovementComponent;
 
@@ -35,6 +36,7 @@ public:
 	/** Returns ProjectileMovement subobject **/
 	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 
+	UFUNCTION(BlueprintCallable)
 	void Initialize(float gunDamage);
 
 	UFUNCTION(BlueprintGetter)

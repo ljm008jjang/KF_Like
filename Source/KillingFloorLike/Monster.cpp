@@ -88,7 +88,7 @@ UAnimMontage* AMonster::GetHitAnimMontage(AActor* DamageCauser)
 
 	UAnimMontage* Montage;
 
-	if( AnimationMap[EMonsterAnimationType::Hit].Montages.Num() <= 1)
+	if (AnimationMap[EMonsterAnimationType::Hit].Montages.Num() <= 1)
 	{
 		return AnimationMap[EMonsterAnimationType::Hit].Montages[0];
 	}
@@ -124,6 +124,11 @@ EMonsterType AMonster::GetMonsterType()
 {
 	return MonsterType;
 }
+
+/*void AMonster::DoSkill()
+{
+	//IMonsterSkill::DoSkill();
+}*/
 
 /*void AMonster::SetMonsterType(EMonsterType NewMonsterType)
 {

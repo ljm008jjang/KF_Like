@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+#include "MonsterSkill.h"
 #include "Monster.generated.h"
 
 /*UENUM(BlueprintType)
@@ -38,7 +39,8 @@ enum class EMonsterAnimationType : uint8
 	Walk,
 	Run,
 	Attack,
-	Hit
+	Hit,
+	Skill
 };
 
 USTRUCT(BlueprintType)
@@ -65,7 +67,7 @@ enum class EMonsterSoundType : uint8
 
 
 UCLASS()
-class KILLINGFLOORLIKE_API AMonster : public ABaseCharacter
+class KILLINGFLOORLIKE_API AMonster : public ABaseCharacter//, public IMonsterSkill
 {
 	GENERATED_BODY()
 
@@ -118,4 +120,7 @@ public:
 	/*
 	UFUNCTION(BlueprintSetter)
 	void SetMonsterType(EMonsterType NewMonsterType);*/
+
+	/*UFUNCTION(BlueprintCallable)
+	virtual void DoSkill() override;*/
 };
