@@ -57,9 +57,9 @@ private:
 	const float HeadshotScale = 1.1f;
 
 protected:
-	UPROPERTY(BlueprintGetter = GetMaxHP)
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetMaxHP)
 	float MaxHp = 100;
-	UPROPERTY(BlueprintGetter = GetCurrentHP)
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetCurrentHP)
 	float CurrentHp;
 	
 	UPROPERTY(EditAnywhere)

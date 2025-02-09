@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "BaseWeapon.h"
+#include "WeaponSkillInterface.h"
 #include "MeleeWeapon.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class KILLINGFLOORLIKE_API AMeleeWeapon : public ABaseWeapon
+class KILLINGFLOORLIKE_API AMeleeWeapon : public ABaseWeapon, public IWeaponSkillInterface
 {
 	GENERATED_BODY()
 
@@ -20,4 +21,7 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float AttackRange = 100;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SkillFire() override;
 };

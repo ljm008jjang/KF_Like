@@ -98,25 +98,13 @@ void AKillingFloorLikeCharacter::SetupPlayerInputComponent(class UInputComponent
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this,
 		                                   &AKillingFloorLikeCharacter::Look);
 
-		// Fire
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this,
-		                                   &AKillingFloorLikeCharacter::Fire);
-
-		// Fire
-		EnhancedInputComponent->BindAction(ChangeAimTypeAction, ETriggerEvent::Started, this,
-		                                   &AKillingFloorLikeCharacter::ChangeAimType);
-
 		// DropWeapon
 		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Started, this,
 		                                   &AKillingFloorLikeCharacter::DropWeapon);
 
-		// Reload
+		/*// Reload
 		EnhancedInputComponent->BindAction(ReloadWeaponAction, ETriggerEvent::Started, this,
-										   &AKillingFloorLikeCharacter::ReloadWeapon);
-
-		/*// SwapWeapon
-		EnhancedInputComponent->BindAction(SwapWeaponAction, ETriggerEvent::Started, this,
-		                                   &AKillingFloorLikeCharacter::OnTriggerSwapWeapon);*/
+										   &AKillingFloorLikeCharacter::ReloadWeapon);*/
 	}
 }
 
@@ -137,6 +125,11 @@ ABaseWeapon* AKillingFloorLikeCharacter::GetWeapon(EWeaponType WeaponType)
 ABaseWeapon* AKillingFloorLikeCharacter::GetCurrentWeapon()
 {
 	return WeaponArray[CurrentWeaponType];
+}
+
+void AKillingFloorLikeCharacter::SetNextWeaponType(EWeaponType NewNextWeaponType)
+{
+	NextWeaponType =  NewNextWeaponType;
 }
 
 
@@ -166,23 +159,6 @@ void AKillingFloorLikeCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AKillingFloorLikeCharacter::Fire()
-{
-	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType])
-	{
-		ExecWeaponEvent(TEXT("EventFire"));
-	}
-}
-
-void AKillingFloorLikeCharacter::ChangeAimType()
-{
-	if (WeaponArray.Contains(CurrentWeaponType) && WeaponArray[CurrentWeaponType] && GetCurrentWeapon()->
-		IsAimTypeChangeable())
-	{
-		ExecWeaponEvent(TEXT("EventChangeAimType"));
-	}
-}
-
 void AKillingFloorLikeCharacter::DropWeapon()
 {
 	if (WeaponArray.Contains(CurrentWeaponType) == false)
@@ -204,34 +180,26 @@ void AKillingFloorLikeCharacter::DropWeapon()
 	}
 }
 
-void AKillingFloorLikeCharacter::ReloadWeapon()
-{
-	ExecWeaponEvent(TEXT("EventReload"));
-}
 
-void AKillingFloorLikeCharacter::OnTriggerSwapWeapon(int ActionValue)
+EWeaponType AKillingFloorLikeCharacter::IsSwapWeaponable(int ActionValue)
 {
 	if (ActionValue == 1 && WeaponArray.Contains(EWeaponType::Main) && CurrentWeaponType !=
 		EWeaponType::Main)
 	{
-		SwapWeapon(EWeaponType::Main);
+		return EWeaponType::Main;
 	}
 	else if (ActionValue == 2 && WeaponArray.Contains(EWeaponType::Sub) && CurrentWeaponType !=
 		EWeaponType::Sub)
 	{
-		SwapWeapon(EWeaponType::Sub);
+		return EWeaponType::Sub;
 	}
 	else if (ActionValue == 3 && WeaponArray.Contains(EWeaponType::Knife) && CurrentWeaponType !=
 		EWeaponType::Knife)
 	{
-		SwapWeapon(EWeaponType::Knife);
+		return EWeaponType::Knife;
 	}
-}
 
-void AKillingFloorLikeCharacter::SwapWeapon(EWeaponType WeaponType)
-{
-	NextWeaponType = WeaponType;
-	ExecWeaponEvent(TEXT("EventPutDown"));
+	return EWeaponType::None;
 }
 
 void AKillingFloorLikeCharacter::SetHasRifle(bool bNewHasRifle)
@@ -283,7 +251,7 @@ void AKillingFloorLikeCharacter::EnableActor(bool isEnable, AActor* Actor)
 	Actor->SetActorTickEnabled(isEnable);*/
 }
 
-void AKillingFloorLikeCharacter::ExecWeaponEvent(FString EventName)
+/*void AKillingFloorLikeCharacter::ExecWeaponEvent(FString EventName)
 {
 	if (!Mesh1P || !Mesh1P->GetAnimInstance())
 	{
@@ -298,7 +266,7 @@ void AKillingFloorLikeCharacter::ExecWeaponEvent(FString EventName)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Custom Event '%s' 실행 실패!"), *EventName);
 	}
-}
+}*/
 
 void AKillingFloorLikeCharacter::SwapWeaponCallback()
 {

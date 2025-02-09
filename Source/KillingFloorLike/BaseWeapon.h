@@ -22,7 +22,8 @@ enum class EWeaponAnimationType : uint8
 	Fire,
 	Select,
 	PutDown,
-	Reload
+	Reload,
+	SpecialFire
 };
 
 UENUM(BlueprintType)
@@ -140,6 +141,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float FireDamage = 10;
+
+	UPROPERTY(EditAnywhere)
+	float SkillFireDamage = 10;
 
 private:
 	UPROPERTY(EditAnywhere)

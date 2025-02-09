@@ -91,16 +91,18 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Fire();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ChangeAimType();
 
 	void DropWeapon();
 
-	void ReloadWeapon();
 	
 	UFUNCTION(BlueprintCallable)
-	void OnTriggerSwapWeapon(int ActionValue);
+	EWeaponType IsSwapWeaponable(int ActionValue);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SwapWeapon(EWeaponType ActionValue);
 
 protected:
@@ -123,6 +125,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ABaseWeapon* GetCurrentWeapon();
 
+	UFUNCTION(BlueprintSetter)
+	void SetNextWeaponType(EWeaponType NewNextWeaponType);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<EWeaponType, class ABaseWeapon*> WeaponArray;
@@ -130,13 +135,13 @@ private:
 	TSubclassOf<class ABaseWeapon> BaseWeaponClass;
 	UPROPERTY(VisibleAnywhere)
 	EWeaponType CurrentWeaponType = EWeaponType::None;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintSetter = SetNextWeaponType)
 	EWeaponType NextWeaponType = EWeaponType::None;
 
 	void EnableActor(bool isEnable, AActor* Actor);
 
-	UFUNCTION(BlueprintCallable)
-	void ExecWeaponEvent(FString EventName);
+	/*UFUNCTION(BlueprintCallable)
+	void ExecWeaponEvent(FString EventName);*/
 
 	UFUNCTION(BlueprintCallable)
 	void SwapWeaponCallback();
