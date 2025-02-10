@@ -128,6 +128,17 @@ public:
 	UFUNCTION(BlueprintSetter)
 	void SetNextWeaponType(EWeaponType NewNextWeaponType);
 
+	UFUNCTION(BlueprintGetter)
+	float GetMoney();
+	
+	void CalcMoney(float Value);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void MoneyChange();
+
+	UFUNCTION(BlueprintCallable)
+	FString GetMoneyText();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<EWeaponType, class ABaseWeapon*> WeaponArray;
@@ -137,6 +148,8 @@ private:
 	EWeaponType CurrentWeaponType = EWeaponType::None;
 	UPROPERTY(VisibleAnywhere, BlueprintSetter = SetNextWeaponType)
 	EWeaponType NextWeaponType = EWeaponType::None;
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetMoney)
+	float Money = 0;
 
 	void EnableActor(bool isEnable, AActor* Actor);
 

@@ -4,6 +4,7 @@
 #include "Monster.h"
 
 #include "BaseWeapon.h"
+#include "KillingFloorLikeCharacter.h"
 #include "MonsterAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Engine/DamageEvents.h"
@@ -74,6 +75,11 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 void AMonster::Dead(AActor* DamageCauser)
 {
 	Super::Dead(DamageCauser);
+	AKillingFloorLikeCharacter* Attacker = Cast<AKillingFloorLikeCharacter>(DamageCauser->GetOwner());
+	if(Attacker)
+	{
+		Attacker->CalcMoney(Bounty);
+	}
 }
 
 UAnimMontage* AMonster::GetAnimationMontage(EMonsterAnimationType animType, int32 index)

@@ -29,10 +29,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetAmmoText();
 
+	void GetAmmo(int GetAmmoAmount);
+
 private:
 	int32 CurrentLoadedAmmo;
 	int32 SavedAmmo;
 
-	UPROPERTY(EditAnywhere)
-	int32 MaxLoadedAmmo = 30;
+	UPROPERTY(EditAnywhere, Category="Stat")
+	int32 MaxLoadedAmmo;
+	UPROPERTY(EditAnywhere, Category="Stat")
+	int32 MaxSavedAmmo;
 };

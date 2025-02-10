@@ -132,6 +132,22 @@ void AKillingFloorLikeCharacter::SetNextWeaponType(EWeaponType NewNextWeaponType
 	NextWeaponType =  NewNextWeaponType;
 }
 
+float AKillingFloorLikeCharacter::GetMoney()
+{
+	return Money;
+}
+
+void AKillingFloorLikeCharacter::CalcMoney(float Value)
+{
+	Money += Value;
+	MoneyChange();
+}
+
+FString AKillingFloorLikeCharacter::GetMoneyText()
+{
+	return "$" + FString::FromInt(GetMoney());
+}
+
 
 void AKillingFloorLikeCharacter::Move(const FInputActionValue& Value)
 {

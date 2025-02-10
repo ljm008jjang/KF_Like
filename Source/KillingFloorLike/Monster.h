@@ -101,6 +101,9 @@ private:
 	UPROPERTY(EditAnywhere, Category="Stat")
 	float CurrentHeadHP;
 
+	UPROPERTY(EditAnywhere, Category="Stat")
+	float Bounty;
+
 protected:
 	virtual void Dead(AActor* DamageCauser) override;
 

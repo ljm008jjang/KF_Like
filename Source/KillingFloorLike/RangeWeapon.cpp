@@ -112,3 +112,12 @@ FString ARangeWeapon::GetAmmoText()
 {
 	return FString::FromInt(CurrentLoadedAmmo) + " / " + FString::FromInt(SavedAmmo);
 }
+
+void ARangeWeapon::GetAmmo(int GetAmmoAmount)
+{
+	CurrentLoadedAmmo += GetAmmoAmount;
+	if (CurrentLoadedAmmo > MaxLoadedAmmo)
+	{
+		CurrentLoadedAmmo = MaxLoadedAmmo;
+	}
+}
