@@ -53,6 +53,7 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 			{
 				GetMesh()->HideBoneByName(PointDamageEvent->HitInfo.BoneName, PBO_None);
 				realDamageAmount = realDamageAmount + 0.25f * MaxHp; //머리가 터지면 추가 데미지
+				HeadOff(EventInstigator->GetCharacter());
 			}
 		}
 	}
@@ -74,6 +75,11 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 
 void AMonster::Dead(AActor* DamageCauser)
 {
+	if(GetIsAlive() == false)
+	{
+		return;
+	}
+	
 	Super::Dead(DamageCauser);
 	AKillingFloorLikeCharacter* Attacker = Cast<AKillingFloorLikeCharacter>(DamageCauser->GetOwner());
 	if(Attacker)

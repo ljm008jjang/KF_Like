@@ -93,11 +93,16 @@ void ABaseCharacter::Attack()
 
 void ABaseCharacter::Dead(AActor* DamageCauser)
 {
+	if(GetIsAlive() == false)
+	{
+		return;
+	}
+	
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("NoCollision"));
 
 	GetMesh()->SetCollisionProfileName(TEXT("DeadActor"));
 	GetMesh()->SetSimulatePhysics(true);
-	FVector Impulse = (GetActorLocation() - DamageCauser->GetActorLocation()) * 100;
+	//FVector Impulse = (GetActorLocation() - DamageCauser->GetActorLocation()) * 100;
 	//GetMesh()->AddImpulseToAllBodiesBelow(Impulse);
 	if (GetMesh()->GetAnimInstance())
 	{

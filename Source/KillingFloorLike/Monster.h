@@ -40,7 +40,8 @@ enum class EMonsterAnimationType : uint8
 	Run,
 	Attack,
 	Hit,
-	Skill
+	Skill,
+	HeadOff
 };
 
 USTRUCT(BlueprintType)
@@ -105,12 +106,12 @@ private:
 	float Bounty;
 
 protected:
+	UFUNCTION(BlueprintCallable)
 	virtual void Dead(AActor* DamageCauser) override;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	UAnimMontage* GetAnimationMontage(EMonsterAnimationType animType, int32 index);
-
 	UFUNCTION(BlueprintCallable)
 	int32 GetAnimationMaxIndex(EMonsterAnimationType animType);
 
@@ -124,6 +125,9 @@ public:
 
 	UFUNCTION(BlueprintGetter)
 	EMonsterType GetMonsterType();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HeadOff(AActor* DamageCauser);
 
 	/*
 	UFUNCTION(BlueprintSetter)
