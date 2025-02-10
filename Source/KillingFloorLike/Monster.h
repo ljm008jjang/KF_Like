@@ -83,8 +83,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	/*virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	                         AActor* DamageCauser) override;*/
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	                         AActor* DamageCauser) override;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -95,6 +95,11 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintGetter = GetMonsterType)
 	EMonsterType MonsterType;
+
+	UPROPERTY(EditAnywhere, Category="Stat")
+	float MaxHeadHP;
+	UPROPERTY(EditAnywhere, Category="Stat")
+	float CurrentHeadHP;
 
 protected:
 	virtual void Dead(AActor* DamageCauser) override;

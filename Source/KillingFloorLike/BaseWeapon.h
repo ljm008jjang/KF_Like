@@ -131,6 +131,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	USoundBase* GetSoundBase(EWeaponSoundType SoundType, int32 index);
 
+	UFUNCTION(BlueprintGetter)
+	float GetHeadShotValue();
+
 protected:
 	/** The Character holding this weapon*/
 	class AKillingFloorLikeCharacter* Character;
@@ -139,10 +142,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AKillingFloorLikeProjectile> ProjectileClass;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Stat")
 	float FireDamage = 10;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintGetter = GetHeadShotValue, Category="Stat")
+	float HeadShotValue = 1.1f;
+
+	UPROPERTY(EditAnywhere, Category="Stat")
 	float SkillFireDamage = 10;
 
 private:
@@ -165,9 +171,9 @@ private:
 	//true 시 공격 쿨타임이 애니메이션과 동기화 ex)Knife
 	UPROPERTY(EditDefaultsOnly)
 	bool IsAsyncAttackCooltimeWithAnimation = true;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Stat")
 	float MaxAttackCooltime;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Stat")
 	float CurrentAttackCooltime;
 
 	UPROPERTY(EditAnywhere)

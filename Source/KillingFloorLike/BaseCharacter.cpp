@@ -119,7 +119,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 {
 	float realDamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
+	/*if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
 	{
 		const FPointDamageEvent* PointDamageEvent = static_cast<const FPointDamageEvent*>(&DamageEvent);
 		if (PointDamageEvent->HitInfo.BoneName.ToString().Contains(TEXT("Head")))
@@ -133,7 +133,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
 		const FRadialDamageEvent* RadialDamageEvent = static_cast<const FRadialDamageEvent*>(&DamageEvent);
-	}
+	}*/
 
 	CurrentHp -= realDamageAmount;
 	UE_LOG(LogTemp, Display, TEXT("%f"), CurrentHp);

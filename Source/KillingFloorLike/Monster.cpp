@@ -3,8 +3,11 @@
 
 #include "Monster.h"
 
+#include "BaseWeapon.h"
 #include "MonsterAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Engine/DamageEvents.h"
+#include "Runtime/Experimental/Chaos/Private/Chaos/PhysicsObjectInternal.h"
 
 // Sets default values
 AMonster::AMonster()
@@ -18,6 +21,7 @@ AMonster::AMonster()
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHeadHP = MaxHeadHP;
 }
 
 
@@ -27,38 +31,45 @@ void AMonster::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-/*float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
                            AActor* DamageCauser)
 {
-	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float realDamageAmount = AActor::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	FVector NormVec1 = GetActorForwardVector().GetSafeNormal2D();
-	FVector NormVec2 = DamageCauser->GetActorForwardVector().GetSafeNormal2D();
+	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
+	{
+		const FPointDamageEvent* PointDamageEvent = static_cast<const FPointDamageEvent*>(&DamageEvent);
 
-	float Dot = FVector::DotProduct(NormVec1, NormVec2);
-	float Cross = NormVec1.X * NormVec2.Y - NormVec1.Y * NormVec2.X; // 2D에서의 외적
-	float AngleRad = atan2f(Cross, Dot);
-
-	float degree = FMath::RadiansToDegrees(AngleRad);
-
-	if(degree > 135 && degree <= -135)//앞
-	{
+		UE_LOG(LogTemp,Display,TEXT("Hited bone name : %s"), *PointDamageEvent->HitInfo.BoneName.ToString());
 		
-	}else if (degree > 45 && degree <= 135)//좌
+		if (CurrentHeadHP > 0 && PointDamageEvent->HitInfo.BoneName.ToString().Contains(TEXT("Head")))
+		{
+			realDamageAmount *= Cast<ABaseWeapon>(DamageCauser)->GetHeadShotValue(); // 맞은 부위가 Head면, 데미지 1.1배.
+			CurrentHeadHP -= realDamageAmount;
+			UE_LOG(LogTemp, Display, TEXT("CurrentHeadHP : %f"), CurrentHeadHP);
+			
+			if (CurrentHeadHP <= 0)
+			{
+				GetMesh()->HideBoneByName(PointDamageEvent->HitInfo.BoneName, PBO_None);
+				realDamageAmount = realDamageAmount + 0.25f * MaxHp; //머리가 터지면 추가 데미지
+			}
+		}
+	}
+	// RadialDamage 받기.
+	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
-		
-	}else if(degree > -45 && degree <= 45)//후
-	{
-		
-	}else if(degree > -135 && degree <= -45)//우
-	{
-		
+		const FRadialDamageEvent* RadialDamageEvent = static_cast<const FRadialDamageEvent*>(&DamageEvent);
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("degree : %f"), degree);
+	CurrentHp -= realDamageAmount;
+	UE_LOG(LogTemp, Display, TEXT("CurrentHp : %f"), CurrentHp);
+	if (CurrentHp <= 0)
+	{
+		Dead(DamageCauser);
+	}
 
-	return damage;
-}*/
+	return realDamageAmount;
+}
 
 void AMonster::Dead(AActor* DamageCauser)
 {

@@ -48,8 +48,8 @@ void ARangeWeapon::Fire()
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride =
 				ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-			ActorSpawnParams.Owner = GetOwner(); // 현재 액터의 Owner를 설정
-			ActorSpawnParams.Instigator = GetInstigator(); // 공격자를 설정 (옵션)
+			ActorSpawnParams.Owner = this; // 현재 액터의 Owner를 설정
+			ActorSpawnParams.Instigator = GetOwner()->GetInstigator(); // 공격자를 설정 (옵션)
 
 			// Spawn the projectile at the muzzle
 			AKillingFloorLikeProjectile* projectile = World->SpawnActor<AKillingFloorLikeProjectile>(

@@ -113,6 +113,11 @@ USoundBase* ABaseWeapon::GetSoundBase(EWeaponSoundType SoundType, int32 index)
 	return SoundMap[SoundType].SoundBases[index];
 }
 
+float ABaseWeapon::GetHeadShotValue()
+{
+	return HeadShotValue;
+}
+
 void ABaseWeapon::SetAttackCooltime(UAnimMontage* PlayedAnimMontage)
 {
 	if (IsAsyncAttackCooltimeWithAnimation)

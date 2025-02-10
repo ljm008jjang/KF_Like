@@ -46,7 +46,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Stat")
 	float BaseAttackDamage = 10;
 	UPROPERTY(VisibleAnywhere, BlueprintGetter = GetCurrentUnitState)
 	EUnitState CurrentUnitState = EUnitState::None;
@@ -57,14 +57,14 @@ private:
 	const float HeadshotScale = 1.1f;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetMaxHP)
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetMaxHP, Category="Stat")
 	float MaxHp = 100;
-	UPROPERTY(EditAnywhere, BlueprintGetter = GetCurrentHP)
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetCurrentHP, Category="Stat")
 	float CurrentHp;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Stat")
 	float WalkSpeed;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Stat")
 	float RunSpeed;
 
 	UPROPERTY(VisibleAnywhere)
