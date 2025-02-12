@@ -148,6 +148,11 @@ FString AKillingFloorLikeCharacter::GetMoneyText()
 	return "$" + FString::FromInt(GetMoney());
 }
 
+FString AKillingFloorLikeCharacter::GetHPText()
+{
+	return FString::FromInt(GetCurrentHP());
+}
+
 
 void AKillingFloorLikeCharacter::Move(const FInputActionValue& Value)
 {

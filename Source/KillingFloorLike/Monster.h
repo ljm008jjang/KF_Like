@@ -41,7 +41,8 @@ enum class EMonsterAnimationType : uint8
 	Attack,
 	Hit,
 	Skill,
-	HeadOff
+	HeadOff,
+	Stun
 };
 
 USTRUCT(BlueprintType)
@@ -68,7 +69,7 @@ enum class EMonsterSoundType : uint8
 
 
 UCLASS()
-class KILLINGFLOORLIKE_API AMonster : public ABaseCharacter//, public IMonsterSkill
+class KILLINGFLOORLIKE_API AMonster : public ABaseCharacter //, public IMonsterSkill
 {
 	GENERATED_BODY()
 
@@ -102,6 +103,12 @@ private:
 	UPROPERTY(EditAnywhere, Category="Stat")
 	float CurrentHeadHP;
 
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetBleedOutTime, Category="Stat")
+	float BleedOutTime;
+
+	UPROPERTY(EditAnywhere, BlueprintGetter = GetStunThreshold, Category="Stat")
+	float StunThreshold;
+
 	UPROPERTY(EditAnywhere, Category="Stat")
 	float Bounty;
 
@@ -115,7 +122,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetAnimationMaxIndex(EMonsterAnimationType animType);
 
-		
+
 	UFUNCTION(BlueprintCallable)
 	UAnimMontage* GetHitAnimMontage(AActor* DamageCauser);
 
@@ -125,6 +132,12 @@ public:
 
 	UFUNCTION(BlueprintGetter)
 	EMonsterType GetMonsterType();
+
+	UFUNCTION(BlueprintCallable, BlueprintGetter)
+	float GetBleedOutTime();
+
+	UFUNCTION(BlueprintCallable, BlueprintGetter)
+	float GetStunThreshold();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void HeadOff(AActor* DamageCauser);

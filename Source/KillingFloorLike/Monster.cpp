@@ -53,7 +53,7 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 			{
 				GetMesh()->HideBoneByName(PointDamageEvent->HitInfo.BoneName, PBO_None);
 				realDamageAmount = realDamageAmount + 0.25f * MaxHp; //머리가 터지면 추가 데미지
-				HeadOff(EventInstigator->GetCharacter());
+				HeadOff(DamageCauser);
 			}
 		}
 	}
@@ -146,6 +146,16 @@ USoundBase* AMonster::GetSoundBase(EMonsterSoundType SoundType)
 EMonsterType AMonster::GetMonsterType()
 {
 	return MonsterType;
+}
+
+float AMonster::GetBleedOutTime()
+{
+	return BleedOutTime;
+}
+
+float AMonster::GetStunThreshold()
+{
+	return StunThreshold;
 }
 
 /*void AMonster::DoSkill()

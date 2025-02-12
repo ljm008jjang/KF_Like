@@ -139,6 +139,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetMoneyText();
 
+	UFUNCTION(BlueprintCallable)
+	FString GetHPText();
+
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<EWeaponType, class ABaseWeapon*> WeaponArray;
