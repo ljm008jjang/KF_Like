@@ -4,6 +4,6 @@
 #include "WeaponSkillInterface.h"
 
 // Add default functionality here for any IWeaponSkillInterface functions that are not pure virtual.
-void IWeaponSkillInterface::SkillFire()
+void IWeaponSkillInterface::SkillFire(float AttackDamage)
 {
 }

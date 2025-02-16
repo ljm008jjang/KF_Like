@@ -15,9 +15,9 @@ void ARangeWeapon::BeginPlay()
 	SavedAmmo = MaxLoadedAmmo;
 }
 
-void ARangeWeapon::Fire()
+void ARangeWeapon::Fire(float AttackDamage)
 {
-	Super::Fire();
+	Super::Fire(AttackDamage);
 
 	if (Character == nullptr || Character->GetController() == nullptr)
 	{

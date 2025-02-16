@@ -16,12 +16,12 @@ class KILLINGFLOORLIKE_API AMeleeWeapon : public ABaseWeapon, public IWeaponSkil
 	GENERATED_BODY()
 
 public:
-	virtual void Fire() override;
+	virtual void Fire(float AttackDamage) override;
 
 private:
 	UPROPERTY(EditAnywhere)
 	float AttackRange = 100;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void SkillFire() override;
+	virtual void SkillFire(float SkillAttackDamage) override;
 };

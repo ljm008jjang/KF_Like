@@ -95,7 +95,7 @@ public:
 
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
-	virtual void Fire();
+	virtual void Fire(float AttackDamage);
 
 	TSubclassOf<class UAnimInstance> GetAnimInstance();
 
@@ -124,6 +124,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentAimType(EAimType NewAimType);
 
+	UFUNCTION(BlueprintCallable, BlueprintGetter)
+	float GetFireDamage();
+
+	UFUNCTION(BlueprintCallable, BlueprintGetter)
+	float GetSkillFireDamage();
+
 	//normal -> index = 0
 	//Hit 사운드는 0 = 안맞음
 	// 1 = 무기체에 맞음
@@ -142,13 +148,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AKillingFloorLikeProjectile> ProjectileClass;
 
-	UPROPERTY(EditAnywhere, Category="Stat")
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetFireDamage, Category="Stat")
 	float FireDamage = 10;
 
 	UPROPERTY(EditAnywhere,BlueprintGetter = GetHeadShotValue, Category="Stat")
 	float HeadShotValue = 1.1f;
 
-	UPROPERTY(EditAnywhere, Category="Stat")
+	UPROPERTY(EditAnywhere,BlueprintGetter=GetSkillFireDamage, Category="Stat")
 	float SkillFireDamage = 10;
 
 private:

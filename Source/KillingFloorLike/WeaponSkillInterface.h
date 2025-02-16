@@ -22,5 +22,5 @@ class KILLINGFLOORLIKE_API IWeaponSkillInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void SkillFire();
+	virtual void SkillFire(float AttackDamage);
 };

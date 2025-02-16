@@ -32,7 +32,7 @@ void ABaseWeapon::Tick(float DeltaTime)
 	}
 }
 
-void ABaseWeapon::Fire()
+void ABaseWeapon::Fire(float AttackDamage)
 {
 	if (Character == nullptr || Character->GetController() == nullptr)
 	{
@@ -106,6 +106,16 @@ bool ABaseWeapon::IsAimTypeChangeable()
 void ABaseWeapon::SetCurrentAimType(EAimType NewAimType)
 {
 	CurrentAimType = NewAimType;
+}
+
+float ABaseWeapon::GetFireDamage()
+{
+	return FireDamage;
+}
+
+float ABaseWeapon::GetSkillFireDamage()
+{
+	return SkillFireDamage;
 }
 
 USoundBase* ABaseWeapon::GetSoundBase(EWeaponSoundType SoundType, int32 index)

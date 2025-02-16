@@ -37,6 +37,7 @@ public:
 
 private:
 	int32 MaxWaveIndex = 10;
+	// UPROPERTY(BlueprintGetter=)
 	int32 CurrentWave = 0;
 
 	float MaxWaveTime = 3;
@@ -79,4 +80,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode Events")
 	void OnUpdateRemainMonsterCount();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode Events")
+	void OnUpdateWave();
+
+	UFUNCTION(BlueprintCallable)
+	FString GetWaveText();
 };

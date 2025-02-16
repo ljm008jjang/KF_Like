@@ -18,7 +18,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual void Fire() override;
+	virtual void Fire(float AttackDamage) override;
 
 	UFUNCTION(BlueprintCallable)
 	void Reload();

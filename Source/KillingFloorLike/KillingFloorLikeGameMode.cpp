@@ -74,7 +74,9 @@ void AKillingFloorLikeGameMode::StartWave()
 	RefillMonsterPool();
 	ChangeModeType(EModeType::Wave);
 	OnUpdateRemainMonsterCount();
+	OnUpdateWave();
 	UE_LOG(LogTemp, Warning, TEXT("Start Wave"))
+	FHitResult HitResult;
 }
 
 void AKillingFloorLikeGameMode::SpawnMonster()
@@ -198,4 +200,9 @@ AUnitManager* AKillingFloorLikeGameMode::GetUnitManager()
 int32 AKillingFloorLikeGameMode::GetWaveRemainMonsterCount()
 {
 	return MaxSpawnedMonsters - UnitManager->GetSpawnedMonsterCount(false);
+}
+
+FString AKillingFloorLikeGameMode::GetWaveText()
+{
+	return "Wave : " + FString::FromInt(CurrentWave);
 }
