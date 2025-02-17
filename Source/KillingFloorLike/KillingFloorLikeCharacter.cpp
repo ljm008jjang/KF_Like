@@ -6,9 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "TP_PickUpComponent.h"
 #include "TP_WeaponComponent.h"
-#include "Misc/OutputDeviceNull.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -129,7 +127,7 @@ ABaseWeapon* AKillingFloorLikeCharacter::GetCurrentWeapon()
 
 void AKillingFloorLikeCharacter::SetNextWeaponType(EWeaponType NewNextWeaponType)
 {
-	NextWeaponType =  NewNextWeaponType;
+	NextWeaponType = NewNextWeaponType;
 }
 
 float AKillingFloorLikeCharacter::GetMoney()
@@ -186,17 +184,17 @@ void AKillingFloorLikeCharacter::DropWeapon()
 	{
 		return;
 	}
-
-	if (UTP_PickUpComponent* PickUpComponent = WeaponArray[CurrentWeaponType]->GetOwner()->FindComponentByClass<
-		UTP_PickUpComponent>())
-	{
-		PickUpComponent->OnDrop.Broadcast(this);
-	}
+	
+	WeaponArray[CurrentWeaponType]->DropWeapon(this);
+	
 	WeaponArray.Remove(CurrentWeaponType);
 	for (const TPair<EWeaponType, ABaseWeapon*>& Pair : WeaponArray)
 	{
 		ABaseWeapon* Value = Pair.Value;
-		SwapWeapon(Value->GetWeaponType());
+		//SwapWeapon(Value->GetWeaponType());
+		NextWeaponType = Value->GetWeaponType();
+		SwapWeaponCallback();
+		PlayWeaponSelectAnim();
 		break;
 	}
 }

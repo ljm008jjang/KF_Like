@@ -4,7 +4,7 @@
 #include "BaseWeapon.h"
 
 #include "KillingFloorLikeCharacter.h"
-#include "KillingFloorLikeProjectile.h"
+#include "TP_PickUpComponent.h"
 
 // Sets default values
 ABaseWeapon::ABaseWeapon()
@@ -167,12 +167,22 @@ void ABaseWeapon::DropWeapon(AKillingFloorLikeCharacter* TargetCharacter)
 	{
 		return;
 	}
+
+	if (UTP_PickUpComponent* PickUpComponent = FindComponentByClass<UTP_PickUpComponent>())
+	{
+		PickUpComponent->OnDrop.Broadcast(TargetCharacter);
+		PickUpComponent->AfterDrop();
+	}
+	
 	Character = nullptr;
-	StaticMeshComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	GetOwner()->SetActorLocation(GetOwner()->GetActorLocation() + TargetCharacter->GetActorForwardVector() * 300, true,
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	SetActorLocation(GetOwner()->GetActorLocation() + TargetCharacter->GetActorForwardVector() * 300, true,
 	                             nullptr, ETeleportType::TeleportPhysics);
+	
 	StaticMeshComponent->SetSimulatePhysics(true);
-	StaticMeshComponent->AddImpulse(TargetCharacter->GetActorForwardVector() * 3000);
+	StaticMeshComponent->SetVisibility(true);
+	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	StaticMeshComponent->AddImpulse(TargetCharacter->GetActorForwardVector() * 300);
 
 	SetOwner(nullptr);
 }

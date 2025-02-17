@@ -30,6 +30,8 @@ public:
 	FString GetAmmoText();
 
 	void GetAmmo(int GetAmmoAmount);
+	
+	virtual bool IsAttackable() override;
 
 private:
 	int32 CurrentLoadedAmmo;

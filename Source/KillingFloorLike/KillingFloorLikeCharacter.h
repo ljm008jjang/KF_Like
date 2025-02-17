@@ -105,6 +105,9 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SwapWeapon(EWeaponType ActionValue);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void PlayWeaponSelectAnim();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

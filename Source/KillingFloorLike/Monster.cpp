@@ -5,10 +5,7 @@
 
 #include "BaseWeapon.h"
 #include "KillingFloorLikeCharacter.h"
-#include "MonsterAIController.h"
-#include "BehaviorTree/BehaviorTree.h"
 #include "Engine/DamageEvents.h"
-#include "Runtime/Experimental/Chaos/Private/Chaos/PhysicsObjectInternal.h"
 
 // Sets default values
 AMonster::AMonster()

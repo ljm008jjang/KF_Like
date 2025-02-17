@@ -121,3 +121,8 @@ void ARangeWeapon::GetAmmo(int GetAmmoAmount)
 		CurrentLoadedAmmo = MaxLoadedAmmo;
 	}
 }
+
+bool ARangeWeapon::IsAttackable()
+{
+	return Super::IsAttackable() && CurrentLoadedAmmo > 0;
+}

@@ -107,7 +107,7 @@ public:
 	UAnimMontage* GetAnimation(EWeaponAnimationType AnimationType, bool IsIron, int index);
 
 	UFUNCTION(BlueprintCallable)
-	bool IsAttackable();
+	virtual bool IsAttackable();
 
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentAttackCooltime();

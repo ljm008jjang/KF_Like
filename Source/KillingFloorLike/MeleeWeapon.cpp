@@ -54,7 +54,7 @@ void AMeleeWeapon::Fire(float AttackDamage)
 		End = End * Length;
 		End += Start;
 
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, true);
+		//DrawDebugLine(GetWorld(), Start, End, FColor::Red, true);
 
 		TArray<FHitResult> HitResult; // 충돌 결과를 저장할 변수
 		FCollisionObjectQueryParams ObjectQueryParams;
@@ -92,6 +92,7 @@ void AMeleeWeapon::Fire(float AttackDamage)
 		}
 	}
 
+	bool IsHit = false;
 	for (auto HitPair : HitMap)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s : %s"), *HitPair.Key->GetName(),
@@ -108,13 +109,18 @@ void AMeleeWeapon::Fire(float AttackDamage)
 				this,
 				UDamageType::StaticClass()
 			);
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 2),
-			                                      HitPair.Key->GetActorLocation());
+			IsHit = true;
 			UE_LOG(LogTemp, Log, TEXT("%s"), *HitPair.Key -> GetName());
-			return;
 		}
 	}
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 0), GetActorLocation());
+	if(IsHit)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 2),
+													  GetActorLocation());
+	}else
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 0), GetActorLocation());
+	}
 
 	/*// 월드에서 현재 위치를 기준으로 검색할 위치와 반경 정의
 	FVector SearchOrigin = GetActorLocation(); // 검색 중심점
