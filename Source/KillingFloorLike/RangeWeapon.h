@@ -18,10 +18,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual void Fire(float AttackDamage) override;
+	virtual bool FireWeapon(float AttackDamage) override;
 
 	UFUNCTION(BlueprintCallable)
 	void Reload();
+
+	UFUNCTION(BlueprintCallable)
+	void ReloadAmmoAdd(int ReloadedAmmo);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsReloadable();
@@ -30,14 +33,17 @@ public:
 	FString GetAmmoText();
 
 	void GetAmmo(int GetAmmoAmount);
-	
+
 	virtual bool IsAttackable() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintGetter)
+	int32 GetMaxLoadedAmmon();
 
 private:
 	int32 CurrentLoadedAmmo;
 	int32 SavedAmmo;
 
-	UPROPERTY(EditAnywhere, Category="Stat")
+	UPROPERTY(EditAnywhere, BlueprintGetter=GetMaxLoadedAmmon, Category="Stat")
 	int32 MaxLoadedAmmo;
 	UPROPERTY(EditAnywhere, Category="Stat")
 	int32 MaxSavedAmmo;

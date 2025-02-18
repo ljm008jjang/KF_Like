@@ -15,11 +15,22 @@ void ARangeWeapon::BeginPlay()
 	SavedAmmo = MaxLoadedAmmo;
 }
 
-void ARangeWeapon::Fire(float AttackDamage)
+bool ARangeWeapon::FireWeapon(float AttackDamage)
 {
-	Super::Fire(AttackDamage);
+	if (CurrentLoadedAmmo <= 0)
+	{
+		return false;
+	}
+	
+	if(Super::FireWeapon(AttackDamage))
+	{
+		CurrentLoadedAmmo--;
 
-	if (Character == nullptr || Character->GetController() == nullptr)
+		return true;
+	}
+	return false;
+
+	/*if (Character == nullptr || Character->GetController() == nullptr)
 	{
 		return;
 	}
@@ -57,26 +68,9 @@ void ARangeWeapon::Fire(float AttackDamage)
 				ActorSpawnParams);
 			if (projectile)
 			{
-				projectile->Initialize(FireDamage);
+				projectile->Initialize(AttackDamage);
 				CurrentLoadedAmmo--;
 			}
-		}
-	}
-
-	// Try and play the sound if specified
-	/*if (FireSound != nullptr)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation());
-	}
-
-	// Try and play a firing animation if specified
-	if (FireAnimation != nullptr)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Character->GetMesh1P()->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}*/
 }
@@ -91,6 +85,17 @@ void ARangeWeapon::Reload()
 	int32 ReloadAmmoCount = FMath::Min(MaxLoadedAmmo, AllAmmonCount);
 	CurrentLoadedAmmo = ReloadAmmoCount;
 	SavedAmmo = AllAmmonCount - ReloadAmmoCount;
+}
+
+void ARangeWeapon::ReloadAmmoAdd(int ReloadedAmmo)
+{
+	if (SavedAmmo <= 0)
+	{
+		return;
+	}
+
+	CurrentLoadedAmmo += ReloadedAmmo;
+	SavedAmmo -= ReloadedAmmo;
 }
 
 bool ARangeWeapon::IsReloadable()
@@ -125,4 +130,9 @@ void ARangeWeapon::GetAmmo(int GetAmmoAmount)
 bool ARangeWeapon::IsAttackable()
 {
 	return Super::IsAttackable() && CurrentLoadedAmmo > 0;
+}
+
+int32 ARangeWeapon::GetMaxLoadedAmmon()
+{
+	return MaxLoadedAmmo;
 }

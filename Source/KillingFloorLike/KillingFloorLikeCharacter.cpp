@@ -45,23 +45,26 @@ void AKillingFloorLikeCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	if (BaseWeaponClass)
+	if (BaseWeaponClasses.IsEmpty() == false)
 	{
-		// 스폰 위치와 회전 설정
-		FVector SpawnLocation = GetActorLocation(); // 또는 원하는 위치
-		FRotator SpawnRotation = GetActorRotation(); // 또는 원하는 회전
-
-		// 스폰 파라미터 설정
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		// 무기 스폰
-		ABaseWeapon* SpawnedWeapon = GetWorld()->SpawnActor<ABaseWeapon>(
-			BaseWeaponClass, SpawnLocation, SpawnRotation, SpawnParams);
-
-		if (SpawnedWeapon)
+		for(auto BaseWeaponClass : BaseWeaponClasses)
 		{
-			SpawnedWeapon->AttachWeapon(this);
+			// 스폰 위치와 회전 설정
+			FVector SpawnLocation = GetActorLocation(); // 또는 원하는 위치
+			FRotator SpawnRotation = GetActorRotation(); // 또는 원하는 회전
+
+			// 스폰 파라미터 설정
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+			// 무기 스폰
+			ABaseWeapon* SpawnedWeapon = GetWorld()->SpawnActor<ABaseWeapon>(
+				BaseWeaponClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+			if (SpawnedWeapon)
+			{
+				SpawnedWeapon->AttachWeapon(this);
+			}
 		}
 	}
 

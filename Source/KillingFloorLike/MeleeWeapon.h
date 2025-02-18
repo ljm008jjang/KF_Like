@@ -16,7 +16,7 @@ class KILLINGFLOORLIKE_API AMeleeWeapon : public ABaseWeapon, public IWeaponSkil
 	GENERATED_BODY()
 
 public:
-	virtual void Fire(float AttackDamage) override;
+	virtual bool FireWeapon(float AttackDamage) override;
 
 private:
 	UPROPERTY(EditAnywhere)

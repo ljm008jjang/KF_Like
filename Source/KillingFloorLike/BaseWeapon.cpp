@@ -5,6 +5,7 @@
 
 #include "KillingFloorLikeCharacter.h"
 #include "TP_PickUpComponent.h"
+#include "WeaponShootingInterface.h"
 
 // Sets default values
 ABaseWeapon::ABaseWeapon()
@@ -20,6 +21,8 @@ void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	SetAttackCooltime(GetAnimation(EWeaponAnimationType::Fire, false, 0));
+	
+	ShootingComponent = FindComponentByInterface<IWeaponShootingInterface>();
 }
 
 // Called every frame
@@ -32,12 +35,19 @@ void ABaseWeapon::Tick(float DeltaTime)
 	}
 }
 
-void ABaseWeapon::Fire(float AttackDamage)
+bool ABaseWeapon::FireWeapon(float AttackDamage)
 {
 	if (Character == nullptr || Character->GetController() == nullptr)
 	{
-		return;
+		return false;
 	}
+	
+	if (ShootingComponent)
+	{
+		return ShootingComponent->Fire(Character, AttackDamage);  // 현재 장착된 발사 방식을 실행
+	}
+
+	return false;
 }
 
 TSubclassOf<class UAnimInstance> ABaseWeapon::GetAnimInstance()
@@ -118,10 +128,10 @@ float ABaseWeapon::GetSkillFireDamage()
 	return SkillFireDamage;
 }
 
-USoundBase* ABaseWeapon::GetSoundBase(EWeaponSoundType SoundType, int32 index)
+/*USoundBase* ABaseWeapon::GetSoundBase(EWeaponSoundType SoundType, int32 index)
 {
 	return SoundMap[SoundType].SoundBases[index];
-}
+}*/
 
 float ABaseWeapon::GetHeadShotValue()
 {

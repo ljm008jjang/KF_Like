@@ -150,7 +150,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<EWeaponType, class ABaseWeapon*> WeaponArray;
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ABaseWeapon> BaseWeaponClass;
+	TArray<TSubclassOf<class ABaseWeapon>> BaseWeaponClasses;
 	UPROPERTY(VisibleAnywhere)
 	EWeaponType CurrentWeaponType = EWeaponType::None;
 	UPROPERTY(VisibleAnywhere, BlueprintSetter = SetNextWeaponType)

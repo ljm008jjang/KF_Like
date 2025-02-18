@@ -1,23 +1,49 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MeleeWeapon.h"
+#include "MeleeShootingComponent.h"
 
 #include "KillingFloorLikeCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
-bool AMeleeWeapon::FireWeapon(float AttackDamage)
+// Sets default values for this component's properties
+UMeleeShootingComponent::UMeleeShootingComponent()
 {
-	return Super::FireWeapon(AttackDamage);
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = false;
 
+	// ...
+}
+
+
+// Called when the game starts
+void UMeleeShootingComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// ...
 	
+}
 
-	/*if (Character == nullptr || Character->GetController() == nullptr)
+
+// Called every frame
+void UMeleeShootingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	// ...
+}
+
+bool UMeleeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, float AttackDamage)
+{
+	if (Character == nullptr || Character->GetController() == nullptr)
 	{
 		return false;
 	}
 	//Shoot();
 
-	APlayerController* PlayerController = Cast<APlayerController>(GetOwner()->GetInstigatorController());
+	APlayerController* PlayerController = Cast<APlayerController>(Character->GetInstigatorController());
 	FVector Start = PlayerController->PlayerCameraManager->GetCameraLocation();
 	float Length = AttackRange;
 
@@ -43,7 +69,7 @@ bool AMeleeWeapon::FireWeapon(float AttackDamage)
 		// 회전 변환 적용
 		//x = xCosA - ySinA
 		//y = xSinA + yCosA
-		FVector RotationAxis = GetActorUpVector().GetSafeNormal();
+		FVector RotationAxis = GetOwner()->GetActorUpVector().GetSafeNormal();
 		FQuat RotationQuat = FQuat(RotationAxis, FMath::DegreesToRadians(thisAngle));
 		End = RotationQuat.RotateVector(ForwardVec);
 
@@ -52,7 +78,7 @@ bool AMeleeWeapon::FireWeapon(float AttackDamage)
 		End = End * Length;
 		End += Start;
 
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Red, true);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Red, true);
 
 		TArray<FHitResult> HitResult; // 충돌 결과를 저장할 변수
 		FCollisionObjectQueryParams ObjectQueryParams;
@@ -101,10 +127,10 @@ bool AMeleeWeapon::FireWeapon(float AttackDamage)
 			UGameplayStatics::ApplyPointDamage(
 				HitPair.Key,
 				AttackDamage,
-				GetActorLocation(),
+				Character->GetActorLocation(),
 				HitPair.Value,
-				GetInstigatorController(),
-				this,
+				Character->GetInstigatorController(),
+				GetOwner(),
 				UDamageType::StaticClass()
 			);
 			IsHit = true;
@@ -114,65 +140,17 @@ bool AMeleeWeapon::FireWeapon(float AttackDamage)
 	if(IsHit)
 	{
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 2),
-													  GetActorLocation());
+													  Character->GetActorLocation());
 	}else
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 0), GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 0), Character->GetActorLocation());
 	}
 
-	return true;*/
-
-	/*// 월드에서 현재 위치를 기준으로 검색할 위치와 반경 정의
-	FVector SearchOrigin = GetActorLocation(); // 검색 중심점
-
-	// 검색 조건 설정
-	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes; // 검색할 객체 타입
-
-	TArray<AActor*> IgnoredActors; // 검색에서 제외할 액터 리스트
-	TArray<AActor*> OutActors; // 검색 결과를 담을 배열
-
-	// SphereOverlapActors 호출
-	bool bFound = UKismetSystemLibrary::SphereOverlapActors(
-		GetWorld(),
-		SearchOrigin,
-		AttackRange,
-		ObjectTypes,
-		ABaseCharacter::StaticClass(),
-		IgnoredActors,
-		OutActors
-	);
-
-	// 결과 출력
-	if (bFound)
-	{
-		for (AActor* FoundActor : OutActors)
-		{
-			if (FoundActor && FoundActor != this)
-			{
-				ABaseCharacter* FoundBaseCharacter = Cast<ABaseCharacter>(FoundActor);
-				if (FoundBaseCharacter && Character->IsAttackableUnitType(FoundBaseCharacter))
-				{
-					UGameplayStatics::ApplyDamage(
-						FoundBaseCharacter,
-						FireDamage,
-						GetInstigatorController(),
-						this,
-						UDamageType::StaticClass()
-					);
-					UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 2),
-					                                      FoundBaseCharacter->GetActorLocation());
-					UE_LOG(LogTemp, Log, TEXT("%s"), *FoundBaseCharacter -> GetName());
-					return;
-				}
-			}
-		}
-	}
-
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), GetSoundBase(EWeaponSoundType::Hit, 0), GetActorLocation());
-	*/
+	return true;
 }
 
-void AMeleeWeapon::SkillFire(float SkillAttackDamage)
+USoundBase* UMeleeShootingComponent::GetSoundBase(EWeaponSoundType SoundType, int32 index)
 {
-	FireWeapon(SkillAttackDamage);
+	return SoundMap[SoundType].SoundBases[index];
 }
+

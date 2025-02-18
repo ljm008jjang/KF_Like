@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
+class IWeaponShootingInterface;
+
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
@@ -47,27 +49,6 @@ public:
 	TArray<UAnimMontage*> IronMontages;
 };
 
-UENUM(BlueprintType)
-enum class EWeaponSoundType : uint8
-{
-	None,
-	Fire,
-	Hit,
-	Select,
-	PutDown,
-	Reload
-};
-
-USTRUCT(BlueprintType)
-struct FWeaponSoundBases
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditAnywhere)
-	TArray<USoundBase*> SoundBases;
-};
-
 UCLASS()
 class KILLINGFLOORLIKE_API ABaseWeapon : public AActor
 {
@@ -95,7 +76,7 @@ public:
 
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
-	virtual void Fire(float AttackDamage);
+	virtual bool FireWeapon(float AttackDamage);
 
 	TSubclassOf<class UAnimInstance> GetAnimInstance();
 
@@ -134,8 +115,10 @@ public:
 	//Hit 사운드는 0 = 안맞음
 	// 1 = 무기체에 맞음
 	// 2 = 몬스터에 맞음
+	/*
 	UFUNCTION(BlueprintCallable)
 	USoundBase* GetSoundBase(EWeaponSoundType SoundType, int32 index);
+	*/
 
 	UFUNCTION(BlueprintGetter)
 	float GetHeadShotValue();
@@ -144,9 +127,9 @@ protected:
 	/** The Character holding this weapon*/
 	class AKillingFloorLikeCharacter* Character;
 
-	/** Projectile class to spawn */
+	/*/** Projectile class to spawn #1#
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AKillingFloorLikeProjectile> ProjectileClass;
+	TSubclassOf<class AKillingFloorLikeProjectile> ProjectileClass;*/
 
 	UPROPERTY(EditAnywhere, BlueprintGetter=GetFireDamage, Category="Stat")
 	float FireDamage = 10;
@@ -166,6 +149,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USkeletalMesh* SkeletalMesh;
+	
+	IWeaponShootingInterface* ShootingComponent;  // 인터페이스로 설정
 
 
 	UPROPERTY(EditDefaultsOnly)
@@ -185,8 +170,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	TMap<EWeaponAnimationType, FAttackMontages> AnimationMap;
 
-	UPROPERTY(EditAnywhere)
-	TMap<EWeaponSoundType, FWeaponSoundBases> SoundMap;
+	/*UPROPERTY(EditAnywhere)
+	TMap<EWeaponSoundType, FWeaponSoundBases> SoundMap;*/
 
 	void SetAttackCooltime(UAnimMontage* PlayedAnimMontage);
 };
