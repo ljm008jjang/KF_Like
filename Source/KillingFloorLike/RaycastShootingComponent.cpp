@@ -61,6 +61,7 @@ bool URaycastShootingComponent::Fire(AKillingFloorLikeCharacter* Character, floa
 	TArray<FHitResult> HitResult; // 충돌 결과를 저장할 변수
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
 
 	// 레이캐스트 실행
 	bool bHit = GetWorld()->LineTraceMultiByObjectType(
@@ -75,9 +76,10 @@ bool URaycastShootingComponent::Fire(AKillingFloorLikeCharacter* Character, floa
 	for (FHitResult result : HitResult)
 	{
 		ABaseCharacter* HitCharacter = Cast<ABaseCharacter>(result.GetActor());
+		//몬스터가 아닌걸 맞추면 stop
 		if (HitCharacter == nullptr)
 		{
-			continue;
+			break;
 		}
 
 		if (HitMap.Contains(HitCharacter) == false)
