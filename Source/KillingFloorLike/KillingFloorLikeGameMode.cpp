@@ -11,6 +11,8 @@
 void AKillingFloorLikeGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// DebugManagerComponent = GetComponentByClass<UDebugManagerComponent>();
 }
 
 AKillingFloorLikeGameMode::AKillingFloorLikeGameMode()
@@ -206,3 +208,8 @@ FString AKillingFloorLikeGameMode::GetWaveText()
 {
 	return "Wave : " + FString::FromInt(CurrentWave);
 }
+
+/*UDebugManagerComponent* AKillingFloorLikeGameMode::GetDebugManagerComponent()
+{
+	return DebugManagerComponent;
+}*/

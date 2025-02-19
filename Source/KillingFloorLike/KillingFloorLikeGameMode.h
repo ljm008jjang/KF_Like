@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "KillingFloorLikeGameMode.generated.h"
 
+class UDebugManagerComponent;
 enum class EMonsterType : uint8;
 class AUnitManager;
 
@@ -56,6 +57,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	TMap<EMonsterType, int32> MonsterPool;
 
+	//UDebugManagerComponent* DebugManagerComponent;
+
 	UFUNCTION(BlueprintCallable)
 	void StartWave();
 	void SpawnMonster();
@@ -86,4 +89,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FString GetWaveText();
+	
+	// UDebugManagerComponent* GetDebugManagerComponent();
 };

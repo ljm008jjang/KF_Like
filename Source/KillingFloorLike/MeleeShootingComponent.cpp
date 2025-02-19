@@ -3,6 +3,7 @@
 
 #include "MeleeShootingComponent.h"
 
+#include "DebugManagerComponent.h"
 #include "KillingFloorLikeCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -77,8 +78,8 @@ bool UMeleeShootingComponent::Fire(AKillingFloorLikeCharacter* Character, float 
 
 		End = End * Length;
 		End += Start;
-
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, true);
+		
+		UDebugManagerComponent::DrawDebugLineManager(GetWorld(), Start, End, FColor::Red, true);
 
 		TArray<FHitResult> HitResult; // 충돌 결과를 저장할 변수
 		FCollisionObjectQueryParams ObjectQueryParams;
